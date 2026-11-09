@@ -1,0 +1,12 @@
+<USER_REQUEST>
+Trabalho 4 – Em grupo 
+Considerando a planilha de demanda do vestibular, apresentar no dia 09/11, quais cursos que 
+devem ser abertos no período da manhã, tarde e noite? Sendo um curso por período.  
+Deve-se apresentar a justificativa para cada curso. gere dados explicando utilize codigo em python para analizar, nao faca  uma analize apenas com a ia mas utilize para melhorar os graficos e as colunas 
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-11-09T14:19:05-03:00.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

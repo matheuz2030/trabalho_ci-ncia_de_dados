@@ -1,0 +1,166 @@
+﻿Periodo,Curso,Eixo,Semestres,Demanda_Media,Demanda_Recente_24,Desvio_Padrao,Tendencia,Qtd_Media,Demanda_Ponderada
+Manhã,Análise e Desenvolvimento de Sistemas,Informação e Comunicação,6,5.16,5.51,1.34,-0.152,23.3,120.52
+Manhã,Produção Cultural,Produção Cultural e Design,2,5.1,5.1,0.5,0.0,1.0,5.1
+Manhã,Secretariado e Assessoria Internacional,Gestão e Negócios,6,3.73,3.3,2.16,-0.633,1.0,3.73
+Manhã,Desenvolvimento de Software Multiplataforma,Informação e Comunicação,6,3.21,3.15,1.07,-0.285,5.2,16.59
+Manhã,Design de Mídias Digitais,Informação e Comunicação,6,3.17,2.28,1.75,-0.706,1.0,3.17
+Manhã,Gestão da Tecnologia da Informação,Informação e Comunicação,6,3.13,3.58,0.81,-0.012,4.3,13.56
+Manhã,Têxtil e Moda,Produção Industrial,1,2.85,,0.0,0.0,1.0,2.85
+Manhã,Ciência de Dados,Informação e Comunicação,6,2.8,3.93,1.15,0.239,1.0,2.8
+Manhã,Gestão de Recursos Humanos,Gestão e Negócios,6,2.8,2.55,1.28,-0.383,5.5,15.38
+Manhã,Gestão de Turismo,"Turismo, Hospitalidade e Lazer",6,2.8,3.06,1.47,-0.287,1.0,2.8
+Manhã,Instalações Elétricas,Controle e Processos Industriais,6,2.73,2.61,1.17,-0.356,1.0,2.73
+Manhã,Design de Produto com Ênfase em Processos de Produção e Industrialização,Produção Cultural e Design,6,2.59,2.38,1.16,-0.298,1.2,3.02
+Manhã,Gestão Portuária,Infraestrutura,6,2.41,2.89,0.75,0.016,1.0,2.41
+Manhã,Mecanização em Agricultura de Precisão,Controle e Processos Industriais,6,2.4,2.52,0.7,-0.057,1.0,2.4
+Manhã,Segurança da Informação,Informação e Comunicação,6,2.36,2.71,0.53,0.027,3.0,7.09
+Manhã,Gestão da Qualidade,Gestão e Negócios,6,2.34,2.22,1.29,-0.34,1.0,2.34
+Manhã,Mecânica Automobilística,Controle e Processos Industriais,2,2.34,2.34,1.75,0.0,1.0,2.34
+Manhã,Sistemas Biomédicos,Ambiente e Saúde,6,2.28,2.1,0.99,-0.293,2.5,5.7
+Manhã,Big Data para Negócios,Informação e Comunicação,6,2.21,2.57,0.49,0.013,1.0,2.21
+Manhã,Comércio Exterior,Gestão e Negócios,6,2.19,2.32,0.83,-0.152,4.3,9.5
+Manhã,Design de Moda,Produção Cultural e Design,5,2.16,2.59,0.82,0.112,1.0,2.16
+Manhã,Automação Industrial,Controle e Processos Industriais,6,2.07,2.46,0.5,0.034,3.0,6.21
+Manhã,Logística,Gestão e Negócios,6,2.06,2.04,0.8,-0.204,7.2,14.78
+Manhã,Logística Aeroportuária,Gestão e Negócios,6,2.01,1.94,0.66,-0.183,2.0,4.01
+Manhã,Jogos Digitais,Informação e Comunicação,6,2.0,2.16,0.5,-0.034,2.0,4.0
+Manhã,Mecatrônica Industrial,Controle e Processos Industriais,6,1.95,1.94,0.54,-0.138,3.0,5.86
+Manhã,Informática para Negócios,Informação e Comunicação,6,1.88,2.1,0.47,-0.027,3.0,5.65
+Manhã,Sistemas para Internet,Informação e Comunicação,6,1.86,2.08,0.38,0.001,3.7,6.81
+Manhã,Gestão Empresarial,Gestão e Negócios,6,1.85,2.0,0.49,-0.063,14.0,25.9
+Manhã,Redes de Computadores,Informação e Comunicação,6,1.84,2.02,0.37,-0.022,1.7,3.06
+Manhã,Construção Civil - Edifícios,Infraestrutura,6,1.81,2.43,1.05,-0.021,1.0,1.81
+Manhã,Sistemas Embarcados,Informação e Comunicação,6,1.78,2.26,0.71,0.042,1.3,2.37
+Manhã,Cosméticos,Produção Industrial,6,1.76,2.16,0.66,-0.012,1.0,1.76
+Manhã,Agroindústria,Produção Alimentícia,5,1.71,2.15,0.64,0.073,1.0,1.71
+Manhã,Processos Químicos,Controle e Processos Industriais,6,1.71,2.18,0.71,0.027,2.0,3.43
+Manhã,Gestão da Produção Industrial,Controle e Processos Industriais,6,1.7,2.01,0.31,0.099,2.7,4.53
+Manhã,Alimentos,Produção Alimentícia,6,1.69,1.9,0.2,0.063,2.0,3.38
+Manhã,Gestão Comercial,Gestão e Negócios,6,1.67,2.09,0.46,0.079,1.2,1.95
+Manhã,Hidráulica e Saneamento Ambiental,Ambiente e Saúde,3,1.67,1.76,0.17,0.062,1.0,1.67
+Manhã,Gestão de Negócios e Pessoas,Gestão e Negócios,3,1.64,1.96,0.77,0.21,1.0,1.64
+Manhã,Microeletrônica,Controle e Processos Industriais,6,1.63,2.33,0.89,0.067,1.0,1.63
+Manhã,Gestão de Logística Integrada,Gestão e Negócios,4,1.62,1.52,0.29,-0.173,1.5,2.43
+Manhã,Gestão de Serviços,Gestão e Negócios,6,1.62,1.88,0.35,0.007,1.0,1.62
+Manhã,Marketing,Gestão e Negócios,6,1.62,1.9,0.37,0.02,1.8,2.97
+Manhã,Gestão Hospitalar,Ambiente e Saúde,6,1.6,1.86,0.4,0.007,1.2,1.86
+Manhã,Produção Agropecuária,Recursos Naturais,6,1.59,1.69,0.25,-0.029,1.0,1.59
+Manhã,Sistemas Navais,Infraestrutura,6,1.59,1.5,0.12,-0.049,1.0,1.59
+Manhã,Materiais,Produção Industrial,3,1.58,1.69,0.41,0.047,1.0,1.58
+Manhã,"Refrigeração, Ventilação e Ar Condicionado",Produção Industrial,6,1.56,1.61,0.44,-0.067,1.0,1.56
+Manhã,Agronegócio,Recursos Naturais,6,1.55,1.62,0.2,-0.028,2.0,3.1
+Manhã,Eventos,"Turismo, Hospitalidade e Lazer",6,1.54,1.9,0.44,0.037,3.0,4.64
+Manhã,Processos Metalúrgicos,Controle e Processos Industriais,5,1.52,2.1,0.41,0.174,1.0,1.52
+Manhã,Fabricação Mecânica,Produção Industrial,6,1.51,1.95,0.4,0.1,3.0,4.54
+Manhã,Manutenção Industrial,Controle e Processos Industriais,6,1.51,1.72,0.34,0.001,2.7,4.02
+Manhã,Construção Naval,Produção Industrial,6,1.48,1.32,0.24,-0.092,1.0,1.48
+Manhã,Controle de Obras,Infraestrutura,6,1.39,1.7,0.32,0.053,1.0,1.39
+Manhã,Transporte Terrestre,Infraestrutura,6,1.39,1.67,0.31,0.05,1.0,1.39
+Manhã,Biocombustíveis,Produção Industrial,5,1.38,1.65,0.28,-0.0,1.0,1.38
+Manhã,Produção Industrial,Controle e Processos Industriais,6,1.36,1.52,0.33,0.016,1.0,1.36
+Manhã,Mecânica - Processos de Produção,Controle e Processos Industriais,3,1.35,1.49,0.26,0.08,1.0,1.35
+Manhã,Mecânica - Processos de Soldagem,Controle e Processos Industriais,5,1.34,1.4,0.27,-0.087,2.0,2.68
+Manhã,Eletrônica Automotiva,Controle e Processos Industriais,5,1.33,1.5,0.44,-0.045,1.0,1.33
+Manhã,Meio Ambiente e Recursos Hídricos,Ambiente e Saúde,4,1.33,,0.26,-0.187,1.8,2.32
+Manhã,Gestão de Empreendimentos Gastronômicos,"Turismo, Hospitalidade e Lazer",4,1.29,1.58,0.39,0.282,1.0,1.29
+Manhã,Mecânica - Projetos,Controle e Processos Industriais,5,1.29,2.2,0.54,0.238,1.0,1.29
+Manhã,Mecânica de Precisão,Controle e Processos Industriais,6,1.29,1.65,0.41,0.073,1.0,1.29
+Manhã,Projetos Mecânicos,Produção Industrial,3,1.27,1.7,0.42,0.152,1.7,2.12
+Manhã,Gestão Ambiental,Ambiente e Saúde,5,1.25,1.7,0.28,0.064,1.0,1.25
+Manhã,Manufatura Avançada,Controle e Processos Industriais,6,1.19,1.55,0.36,0.072,1.8,2.18
+Manhã,Secretariado,Gestão e Negócios,4,1.12,1.15,0.35,-0.043,1.0,1.12
+Manhã,Gestão de Comércio Eletrônico,Gestão e Negócios,1,0.88,,0.0,0.0,1.0,0.88
+Noite,Análise e Desenvolvimento de Sistemas,Informação e Comunicação,6,9.9,9.96,1.96,-0.453,22.3,221.1
+Noite,Design de Mídias Digitais,Informação e Comunicação,6,6.72,5.59,2.27,-0.905,1.0,6.72
+Noite,Secretariado e Assessoria Internacional,Gestão e Negócios,6,6.7,5.83,3.18,-1.032,1.0,6.7
+Noite,Gestão Portuária,Infraestrutura,6,5.41,5.74,1.38,-0.212,1.0,5.41
+Noite,Banco de Dados,Informação e Comunicação,6,5.3,5.56,0.79,-0.12,2.0,10.59
+Noite,Desenvolvimento de Software Multiplataforma,Informação e Comunicação,6,4.83,5.08,0.95,-0.106,8.3,40.26
+Noite,Segurança da Informação,Informação e Comunicação,6,4.76,4.93,1.07,-0.187,5.0,23.79
+Noite,Automação Industrial,Controle e Processos Industriais,6,4.61,4.59,1.18,-0.331,6.0,27.67
+Noite,Eletrônica Industrial,Controle e Processos Industriais,6,4.57,4.5,1.27,-0.35,1.0,4.57
+Noite,Construção Civil - Edifícios,Infraestrutura,6,4.51,4.38,1.32,-0.39,1.0,4.51
+Noite,Mecanização em Agricultura de Precisão,Controle e Processos Industriais,6,4.38,4.14,0.86,-0.319,1.0,4.38
+Noite,Defesa Cibernética,Informação e Comunicação,5,4.35,4.44,0.71,-0.107,1.0,4.35
+Noite,"Refrigeração, Ventilação e Ar Condicionado",Produção Industrial,6,4.35,3.55,1.32,-0.565,1.0,4.35
+Noite,Mecânica Automobilística,Controle e Processos Industriais,6,4.26,3.72,1.71,-0.593,1.0,4.26
+Noite,Construção de Edifícios,Infraestrutura,6,4.21,3.92,1.38,-0.445,1.0,4.21
+Noite,Gestão da Tecnologia da Informação,Informação e Comunicação,6,4.2,4.24,0.96,-0.199,10.0,42.03
+Noite,Informática para Negócios,Informação e Comunicação,6,4.0,4.17,1.03,-0.202,3.0,11.99
+Noite,Comércio Exterior,Gestão e Negócios,6,3.95,3.96,1.05,-0.262,4.0,15.8
+Noite,Gestão de Recursos Humanos,Gestão e Negócios,6,3.68,3.44,1.52,-0.437,6.2,22.72
+Noite,Gestão de Logística Integrada,Gestão e Negócios,4,3.66,3.27,0.95,-0.598,1.0,3.66
+Noite,Mecânica - Projetos,Controle e Processos Industriais,5,3.58,4.61,0.78,0.211,1.0,3.58
+Noite,Análise de Processos Agroindustriais,Recursos Naturais,6,3.56,4.16,0.92,0.105,1.0,3.56
+Noite,Redes de Computadores,Informação e Comunicação,6,3.56,3.68,0.55,-0.094,1.0,3.56
+Noite,Gestão Financeira,Gestão e Negócios,6,3.52,3.12,1.3,-0.474,3.0,10.58
+Noite,Gestão Empresarial,Gestão e Negócios,6,3.36,3.28,0.86,-0.251,18.0,60.42
+Noite,Logística,Gestão e Negócios,6,3.31,3.12,1.14,-0.365,15.5,51.33
+Noite,Sistemas para Internet,Informação e Comunicação,6,3.29,3.74,0.77,0.012,2.0,6.58
+Noite,Projetos Mecânicos,Produção Industrial,6,3.26,3.44,0.8,-0.145,2.2,7.06
+Noite,Manutenção de Aeronaves,Controle e Processos Industriais,6,3.16,3.84,0.9,0.039,1.0,3.16
+Noite,Ciência de Dados,Informação e Comunicação,6,3.11,3.8,0.7,0.169,4.3,13.47
+Noite,Processos Químicos,Controle e Processos Industriais,6,3.01,3.14,0.85,-0.175,2.0,6.02
+Noite,Ciência de Dados para Negócios,Informação e Comunicação,2,2.94,2.94,0.04,0.0,1.0,2.94
+Noite,Jogos Digitais,Informação e Comunicação,6,2.77,3.21,0.84,-0.032,3.0,8.32
+Noite,Radiologia,Ambiente e Saúde,6,2.75,2.34,0.93,-0.362,1.0,2.75
+Noite,Fabricação Mecânica,Produção Industrial,6,2.67,2.9,0.71,-0.105,3.0,8.02
+Noite,Gestão de Negócios e Inovação,Gestão e Negócios,6,2.63,3.04,0.75,-0.041,3.0,7.9
+Noite,Mecânica - Processos de Produção,Controle e Processos Industriais,6,2.62,3.49,0.91,0.302,1.0,2.62
+Noite,Gestão Comercial,Gestão e Negócios,6,2.61,2.58,0.59,-0.167,9.0,23.5
+Noite,Controle de Obras,Infraestrutura,6,2.58,2.28,1.04,-0.346,1.7,4.29
+Noite,Meio Ambiente e Recursos Hídricos,Ambiente e Saúde,2,2.56,2.56,1.75,0.0,2.0,5.12
+Noite,Gestão da Produção Industrial,Controle e Processos Industriais,6,2.46,2.42,0.51,-0.152,13.0,32.04
+Noite,Processos Metalúrgicos,Controle e Processos Industriais,6,2.46,1.98,0.69,-0.334,1.0,2.46
+Noite,Projetos de Estruturas Aeronáuticas,Controle e Processos Industriais,6,2.38,3.66,1.09,0.347,1.0,2.38
+Noite,Hidráulica e Saneamento Ambiental,Ambiente e Saúde,6,2.36,2.52,0.6,-0.112,1.0,2.36
+Noite,Gestão da Qualidade,Gestão e Negócios,6,2.31,3.34,0.98,0.226,1.3,3.08
+Noite,Manutenção Industrial,Controle e Processos Industriais,6,2.31,2.47,0.51,-0.066,4.0,9.23
+Noite,Sistemas Biomédicos,Ambiente e Saúde,6,2.31,2.5,0.64,-0.082,2.0,4.62
+Noite,Cosméticos,Produção Industrial,6,2.23,2.27,0.67,-0.144,1.0,2.23
+Noite,Eletrônica Automotiva,Controle e Processos Industriais,6,2.23,2.18,0.53,-0.149,2.0,4.46
+Noite,Gestão de Comércio Eletrônico,Gestão e Negócios,2,2.19,2.19,0.78,0.0,1.0,2.19
+Noite,Manufatura Avançada,Controle e Processos Industriais,6,2.17,2.92,0.84,0.09,1.0,2.17
+Noite,Agronegócio,Recursos Naturais,6,2.13,2.34,0.44,-0.037,9.0,19.17
+Noite,Produção Industrial,Controle e Processos Industriais,6,2.13,2.5,0.56,0.018,2.0,4.26
+Noite,Soldagem,Controle e Processos Industriais,6,2.12,2.84,0.77,0.134,1.0,2.12
+Noite,Gestão Hospitalar,Ambiente e Saúde,6,2.08,1.9,0.37,-0.064,1.0,2.08
+Noite,Gestão de Energia e Eficiência Energética,Gestão e Negócios,6,2.08,2.52,0.74,0.003,2.0,4.16
+Noite,Alimentos,Produção Alimentícia,6,2.02,2.4,0.44,0.056,1.0,2.02
+Noite,Mecânica - Processos de Soldagem,Controle e Processos Industriais,6,1.94,2.12,0.38,-0.014,2.0,3.88
+Noite,Desenvolvimento de Produtos Plásticos,Produção Industrial,2,1.92,2.4,0.67,0.0,1.0,1.92
+Noite,Produção Têxtil,Produção Industrial,6,1.88,2.32,0.55,0.097,1.0,1.88
+Noite,Mecatrônica Industrial,Controle e Processos Industriais,6,1.85,1.93,0.25,-0.028,1.0,1.85
+Noite,Gestão Desportiva e de Lazer,"Turismo, Hospitalidade e Lazer",2,1.81,1.81,0.69,0.0,1.0,1.81
+Noite,Polímeros,Produção Industrial,6,1.8,2.17,0.54,0.009,3.0,5.4
+Noite,Silvicultura,Recursos Naturais,6,1.8,1.79,0.21,-0.049,1.0,1.8
+Noite,Biocombustíveis,Produção Industrial,6,1.73,1.8,0.28,-0.04,3.0,5.18
+Noite,Geoprocessamento,Informação e Comunicação,4,1.73,2.05,0.66,-0.066,1.0,1.73
+Noite,Transporte Terrestre,Infraestrutura,6,1.72,1.86,0.28,-0.012,2.0,3.43
+Noite,Secretariado,Gestão e Negócios,6,1.66,1.53,0.6,-0.188,1.8,3.04
+Noite,Big Data no Agronegócio,Informação e Comunicação,6,1.64,2.05,0.59,0.0,1.0,1.64
+Noite,Estradas,Infraestrutura,6,1.59,1.87,0.27,0.061,1.0,1.59
+Noite,Marketing,Gestão e Negócios,2,1.48,1.48,0.17,0.0,1.0,1.48
+Noite,Gestão de Turismo,"Turismo, Hospitalidade e Lazer",6,1.47,1.65,0.18,0.038,1.0,1.47
+Noite,Eventos,"Turismo, Hospitalidade e Lazer",6,1.39,1.68,0.26,0.087,2.7,3.7
+Noite,Gestão Ambiental,Ambiente e Saúde,6,1.31,1.66,0.36,0.059,1.0,1.31
+Tarde,Análise e Desenvolvimento de Sistemas,Informação e Comunicação,6,4.23,4.57,1.0,-0.094,13.3,56.4
+Tarde,Desenvolvimento de Software Multiplataforma,Informação e Comunicação,6,2.36,2.94,0.69,0.074,2.8,6.67
+Tarde,Produção Fonográfica,Produção Cultural e Design,6,2.33,3.11,0.97,0.07,1.0,2.33
+Tarde,Paisagismo e Jardinagem,Ambiente e Saúde,2,2.17,2.17,0.41,0.0,1.0,2.17
+Tarde,Big Data no Agronegócio,Informação e Comunicação,6,1.96,2.12,0.46,-0.031,1.0,1.96
+Tarde,Gestão Empresarial,Gestão e Negócios,6,1.83,2.05,0.36,-0.015,4.0,7.33
+Tarde,Comércio Exterior,Gestão e Negócios,6,1.71,1.96,0.44,0.008,2.7,4.55
+Tarde,Logística,Gestão e Negócios,6,1.63,1.78,0.67,-0.108,3.5,5.69
+Tarde,Redes de Computadores,Informação e Comunicação,6,1.6,1.62,0.3,-0.044,1.0,1.6
+Tarde,Automação Industrial,Controle e Processos Industriais,5,1.59,2.05,0.63,-0.109,1.0,1.59
+Tarde,Design de Mídias Digitais,Informação e Comunicação,2,1.56,1.56,0.53,0.0,1.0,1.56
+Tarde,Gestão Financeira,Gestão e Negócios,6,1.56,1.52,0.45,-0.115,1.0,1.56
+Tarde,Agronegócio,Recursos Naturais,6,1.53,1.95,0.41,0.076,2.0,3.06
+Tarde,Mecatrônica Industrial,Controle e Processos Industriais,6,1.51,2.0,0.45,0.117,1.0,1.51
+Tarde,Eletrônica Automotiva,Controle e Processos Industriais,2,1.5,1.6,0.14,0.0,1.0,1.5
+Tarde,Gestão de Empreendimentos Gastronômicos,"Turismo, Hospitalidade e Lazer",4,1.49,1.8,0.46,0.181,1.0,1.49
+Tarde,Construção de Edifícios,Infraestrutura,6,1.48,1.76,0.33,0.026,1.0,1.48
+Tarde,Gestão Ambiental,Ambiente e Saúde,5,1.45,2.35,0.62,0.153,1.0,1.45
+Tarde,Gestão de Turismo,"Turismo, Hospitalidade e Lazer",6,1.36,1.53,0.6,-0.044,1.0,1.36
+Tarde,Gestão Comercial,Gestão e Negócios,3,0.95,,0.24,-0.2,1.0,0.95
