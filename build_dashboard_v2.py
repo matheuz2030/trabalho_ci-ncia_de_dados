@@ -1,0 +1,768 @@
+import os
+import shutil
+
+html_code = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power BI - FATEC Demanda Vestibular | Painel de Decisão Estratégica</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      background-color: #0b111e;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+    .pbi-card {
+      background-color: #151d2f;
+      border: 1px solid #23304a;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+    }
+    .pbi-card:hover {
+      border-color: #3b82f6;
+    }
+    .pbi-header {
+      background: linear-gradient(90deg, #101827 0%, #17243c 100%);
+      border-bottom: 2px solid #f59e0b;
+    }
+    .kpi-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .kpi-value {
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .slicer-btn {
+      background-color: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .slicer-btn.active {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(37,99,235,0.4);
+    }
+    .slicer-btn:hover:not(.active) {
+      background-color: #334155;
+      color: #f1f5f9;
+    }
+    .data-bar-container {
+      background: #1e293b;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .data-bar {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .tooltip-box {
+      position: absolute;
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: white;
+      pointer-events: none;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-6 antialiased">
+
+  <div id="line-tooltip" class="tooltip-box"></div>
+
+  <!-- CABEÇALHO POWER BI -->
+  <header class="pbi-header rounded-xl p-4 mb-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="flex items-center gap-3">
+      <div class="bg-amber-500 text-slate-950 font-black p-2.5 rounded-lg text-lg flex items-center justify-center shadow-md">
+        📊
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded border border-amber-500/30">POWER BI REPORT</span>
+          <span class="text-xs text-slate-400">Trabalho 4 - Em Grupo | FATEC</span>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">Painel de Decisão Estratégica: Alocação de Cursos por Período</h1>
+        <p class="text-xs text-slate-400">Análise de Demanda do Vestibular FATEC (2022.1 a 2024.2) • Apresentação: 09/11</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-right">
+        <div class="text-[10px] text-slate-400 uppercase font-semibold">Total de Registros</div>
+        <div class="text-sm font-bold text-emerald-400">892 Semestres Validados</div>
+      </div>
+      <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-right">
+        <div class="text-[10px] text-slate-400 uppercase font-semibold">Regra do Trabalho</div>
+        <div class="text-sm font-bold text-amber-400">1 Curso por Turno</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEGMENTADORES DE DADOS (SLICERS) -->
+  <div class="pbi-card p-3 mb-5 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+        🔍 Filtro de Turno:
+      </span>
+      <div class="flex gap-1" id="shift-filters">
+        <button class="slicer-btn active" onclick="setShift('todos', this)">Todos os Turnos</button>
+        <button class="slicer-btn" onclick="setShift('Manhã', this)">🌅 Manhã</button>
+        <button class="slicer-btn" onclick="setShift('Tarde', this)">☀️ Tarde</button>
+        <button class="slicer-btn" onclick="setShift('Noite', this)">🌙 Noite</button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+        ⚙️ Cenário de Gestão:
+      </span>
+      <div class="flex gap-1" id="scenario-filters">
+        <button class="slicer-btn active" onclick="setScenario('recomendado', this)">🏆 Portfólio Recomendado</button>
+        <button class="slicer-btn" onclick="setScenario('demanda_pura', this)">⚡ Demanda Pura (ADS em Todos)</button>
+        <button class="slicer-btn" onclick="setScenario('agro', this)">🌾 Cenário Cidades Agro (&lt;200k)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS DE KPI -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+    <div class="pbi-card p-4 border-l-4 border-l-blue-500 relative overflow-hidden">
+      <div class="flex justify-between items-start mb-1">
+        <span class="kpi-title text-blue-400">🌅 Manhã (Recomendado)</span>
+        <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30">TI & Mobile</span>
+      </div>
+      <div class="text-lg font-bold text-white truncate" id="kpi-man-course">DSM (Software Multiplataforma)</div>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="kpi-value text-blue-400" id="kpi-man-dem">3.21</span>
+        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+      </div>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2">
+        <span>2024: <b class="text-white">3.15 C/V</b></span>
+        <span>Escala: <b class="text-white">5.2 unidades</b></span>
+        <span class="text-emerald-400 font-semibold">100% Sinergia</span>
+      </div>
+    </div>
+
+    <div class="pbi-card p-4 border-l-4 border-l-amber-500 relative overflow-hidden">
+      <div class="flex justify-between items-start mb-1">
+        <span class="kpi-title text-amber-400">☀️ Tarde (Recomendado)</span>
+        <span class="badge bg-amber-500/20 text-amber-300 border border-amber-500/30">Gestão & Negócios</span>
+      </div>
+      <div class="text-lg font-bold text-white truncate" id="kpi-tar-course">Gestão Empresarial</div>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="kpi-value text-amber-400" id="kpi-tar-dem">1.83</span>
+        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+      </div>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2">
+        <span>2024: <b class="text-emerald-400">2.05 C/V (↑)</b></span>
+        <span>Escala: <b class="text-white">4.0 unidades</b></span>
+        <span class="text-blue-300 font-semibold">Turno Protegido</span>
+      </div>
+    </div>
+
+    <div class="pbi-card p-4 border-l-4 border-l-emerald-500 relative overflow-hidden">
+      <div class="flex justify-between items-start mb-1">
+        <span class="kpi-title text-emerald-400">🌙 Noite (Recomendado)</span>
+        <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Líder Estadual</span>
+      </div>
+      <div class="text-lg font-bold text-white truncate" id="kpi-noi-course">ADS (Análise e Desenv. Sist.)</div>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="kpi-value text-emerald-400" id="kpi-noi-dem">9.90</span>
+        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+      </div>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2">
+        <span>2024: <b class="text-white">9.96 C/V</b></span>
+        <span>Escala: <b class="text-white">22.3 unidades</b></span>
+        <span class="text-amber-400 font-bold">Recordista Estadual</span>
+      </div>
+    </div>
+
+    <div class="pbi-card p-4 border-l-4 border-l-purple-500 relative overflow-hidden">
+      <div class="flex justify-between items-start mb-1">
+        <span class="kpi-title text-purple-400">📊 Portfólio Integrado</span>
+        <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">3 Turnos</span>
+      </div>
+      <div class="text-lg font-bold text-white truncate" id="kpi-tot-course">Capacidade Plena</div>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="kpi-value text-purple-400" id="kpi-tot-dem">14.94</span>
+        <span class="text-xs text-slate-400">C/V Acumulados</span>
+      </div>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2">
+        <span>Evasão Esperada: <b class="text-emerald-400">Mínima</b></span>
+        <span>Ociosidade: <b class="text-emerald-400">0%</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DICIONÁRIO DE TERMOS & GLOSSÁRIO (O QUE É C/V?) -->
+  <div class="pbi-card p-4 mb-5 border-l-4 border-l-cyan-500 bg-slate-900/90">
+    <div class="flex items-center justify-between mb-2 cursor-pointer" onclick="toggleGlossary()">
+      <div class="flex items-center gap-2">
+        <span class="text-lg text-cyan-400">📚</span>
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">
+          Dicionário de Indicadores do Vestibular: O que significam C/V, Qtd e Eixo?
+        </h3>
+      </div>
+      <span class="text-xs text-cyan-400 font-semibold" id="glossary-toggle-btn">[Clique para recolher/expandir]</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs pt-2 border-t border-slate-800" id="glossary-content">
+      <div class="bg-slate-800/60 p-2.5 rounded border border-slate-700/60">
+        <div class="font-bold text-cyan-300 text-sm mb-1">🎯 C/V (Candidatos por Vaga)</div>
+        <p class="text-slate-300 leading-relaxed">
+          É a <b>relação de concorrência</b> do vestibular:
+          <br><span class="text-amber-300 font-mono">C/V = Inscritos ÷ Vagas Ofertadas</span>.
+          <br><b>Exemplo:</b> Se uma turma oferece 40 vagas e tem <b>9,90 C/V</b>, significa que <b>396 estudantes</b> se inscreveram para disputar aquelas 40 vagas.
+        </p>
+      </div>
+
+      <div class="bg-slate-800/60 p-2.5 rounded border border-slate-700/60">
+        <div class="font-bold text-emerald-300 text-sm mb-1">🏫 Qtd (Escala / Unidades)</div>
+        <p class="text-slate-300 leading-relaxed">
+          Quantidade de faculdades FATEC que ofertam o curso simultaneamente no estado.
+          <br><b>Por que importa?</b> Cursos com <b>Qtd &ge; 4</b> são consolidados no estado. Cursos com <b>Qtd = 1</b> são nichos locais (como Gestão Portuária em Santos).
+        </p>
+      </div>
+
+      <div class="bg-slate-800/60 p-2.5 rounded border border-slate-700/60">
+        <div class="font-bold text-amber-300 text-sm mb-1">📅 Sazonalidade (.1 vs .2)</div>
+        <p class="text-slate-300 leading-relaxed">
+          Os vestibulares <b>.1 (início de ano)</b> são muito mais concorridos que os <b>.2 (meio de ano)</b>, pois os alunos concluem o Ensino Médio em dezembro. Cursos fortes mantêm boa procura mesmo no vestibular .2.
+        </p>
+      </div>
+
+      <div class="bg-slate-800/60 p-2.5 rounded border border-slate-700/60">
+        <div class="font-bold text-purple-300 text-sm mb-1">🔬 Eixo Tecnológico</div>
+        <p class="text-slate-300 leading-relaxed">
+          Classificação do Catálogo Nacional do MEC (ex: <i>Informação e Comunicação</i>, <i>Gestão e Negócios</i>, <i>Controle e Processos Industriais</i>). Permite compartilhar laboratórios e corpo docente.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO DE JUSTIFICATIVAS ESTRATÉGICAS DETALHADAS -->
+  <div class="pbi-card p-5 mb-5 border-t-2 border-t-amber-400">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-lg">📌</span>
+      <h2 class="text-base md:text-lg font-bold text-white tracking-wide">
+        JUSTIFICATIVAS E MOTIVOS DA ESCOLHA (APRESENTAÇÃO TRABALHO 4)
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm" id="decision-text-boxes">
+      <!-- Manhã -->
+      <div class="bg-slate-900/70 p-4 rounded-lg border border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-blue-400 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> 🌅 MANHÃ: DSM
+          </span>
+          <span class="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded">3,21 C/V</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Sinergia Máxima de Infraestrutura (Capex Quase Zero):</b> O campus já contará com laboratórios modernos de informática montados para o curso noturno de ADS. Ofertar <b>DSM (Desenvolvimento de Software Multiplataforma)</b> pela manhã permite reaproveitar <b>100% dos computadores, monitores, servidores e licenças</b>, eliminando equipamentos ociosos durante o dia.
+        </p>
+        <p class="text-xs text-slate-400 mt-2">
+          <b>Público-alvo:</b> Jovens que concluíram o Ensino Médio e querem estudar no período matutino para estagiar no contraturno da tarde.
+        </p>
+      </div>
+
+      <!-- Tarde -->
+      <div class="bg-slate-900/70 p-4 rounded-lg border border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-amber-400 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> ☀️ TARDE: Gestão Empresarial
+          </span>
+          <span class="text-xs text-emerald-400 bg-slate-800 px-2 py-0.5 rounded">2,05 C/V (2024 ↑)</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>Proteção Contra o Turno Mais Crítico:</b> O período da tarde é o mais vulnerável ao cancelamento de turmas (apenas 20 cursos da FATEC operam à tarde). <b>Gestão Empresarial</b> apresenta demanda histórica sólida (1,83 C/V) com <b>aceleração para 2,05 C/V em 2024</b> e baixíssimo desvio padrão (&sigma; = 0,36).
+        </p>
+        <p class="text-xs text-slate-400 mt-2">
+          <b>Diversificação de Eixo:</b> Abre o eixo de <i>Gestão e Negócios</i>, gerando alta empregabilidade no comércio, cooperativas e indústrias locais, evitando que a faculdade se torne dependente unicamente de TI.
+        </p>
+      </div>
+
+      <!-- Noite -->
+      <div class="bg-slate-900/70 p-4 rounded-lg border border-slate-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 🌙 NOITE: ADS
+          </span>
+          <span class="text-xs text-amber-400 bg-slate-800 px-2 py-0.5 rounded">9,90 C/V</span>
+        </div>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <b>O Carro-Chefe Estadual:</b> <b>ADS</b> é o curso mais disputado e consolidado de todo o Centro Paula Souza. No turno da noite, sustenta média impressionante de <b>9,90 candidatos por vaga</b> com mais de <b>22 faculdades FATEC simultâneas</b> com turmas lotadas.
+        </p>
+        <p class="text-xs text-slate-400 mt-2">
+          <b>Garantia Operacional:</b> Preenchimento integral e imediato das vagas, atendendo profissionais que trabalham durante o dia e impulsionando os indicadores institucionais da faculdade.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID DE GRÁFICOS VISUAIS POWER BI -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+    <!-- Visual 1: Ranking Comparativo de Barras -->
+    <div class="pbi-card p-4">
+      <div class="flex justify-between items-center mb-2">
+        <div>
+          <h3 class="text-sm font-bold text-white" id="bar-title">Ranking de Demanda por Turno (Candidatos / Vaga)</h3>
+          <p class="text-[11px] text-slate-400" id="bar-subtitle">Cursos consolidados (&ge; 3 semestres)</p>
+        </div>
+        <span class="text-xs bg-slate-800 text-cyan-400 px-2 py-0.5 rounded border border-slate-700 font-mono font-bold">Visual: Barras</span>
+      </div>
+      <div class="h-64 flex flex-col justify-around text-xs" id="bar-chart-container">
+        <!-- Renderizado dinamicamente -->
+      </div>
+    </div>
+
+    <!-- Visual 2: Série Temporal / Gráfico de Linhas Dinâmico -->
+    <div class="pbi-card p-4">
+      <div class="flex justify-between items-center mb-2">
+        <div>
+          <h3 class="text-sm font-bold text-white" id="line-chart-title">Série Histórica Dinâmica (2022.1 a 2024.2)</h3>
+          <p class="text-[11px] text-slate-400" id="line-chart-subtitle">Atualiza automaticamente conforme o turno selecionado no filtro</p>
+        </div>
+        <span class="text-xs bg-slate-800 text-emerald-400 px-2 py-0.5 rounded border border-slate-700 font-mono font-bold">Visual: Linhas (Dinâmico)</span>
+      </div>
+      <div class="relative w-full h-64" id="line-chart-wrapper">
+        <!-- SVG desenhado e recalculado dinamicamente via JS -->
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-2 text-[11px] text-slate-300" id="line-chart-legend">
+        <!-- Legenda atualizada via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA MATRIZ COM BARRAS DE DADOS -->
+  <div class="pbi-card p-4 mb-5">
+    <div class="flex justify-between items-center mb-3">
+      <div>
+        <h3 class="text-sm font-bold text-white">Matriz de Indicadores e Desempenho dos Cursos</h3>
+        <p class="text-[11px] text-slate-400">Dados oficiais validados (Média C/V, Demanda Recente 2024, Desvio Padrão e Qtd de Unidades)</p>
+      </div>
+      <span class="text-xs bg-slate-800 text-slate-300 px-2 py-1 rounded border border-slate-700">Visual: Tabela Matriz</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="border-b border-slate-700 text-slate-400 uppercase font-semibold">
+            <th class="py-2.5 px-3">Turno</th>
+            <th class="py-2.5 px-3">Curso</th>
+            <th class="py-2.5 px-3">Eixo Tecnológico</th>
+            <th class="py-2.5 px-3">Demanda Média</th>
+            <th class="py-2.5 px-3 w-36">Gráfico C/V</th>
+            <th class="py-2.5 px-3">Demanda 2024</th>
+            <th class="py-2.5 px-3">Desvio (&sigma;)</th>
+            <th class="py-2.5 px-3">Qtd Unidades</th>
+            <th class="py-2.5 px-3">Decisão</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800/60" id="matrix-tbody">
+          <!-- Linhas renderizadas via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="pbi-card p-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-400">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+      <span>Base Oficial FATEC: <b>demanda_vestibular.xlsx</b> (6 semestres validados sem registros nulos)</span>
+    </div>
+    <div>
+      <span>Trabalho 4 - Análise de Demanda do Vestibular | Apresentação em 09/11</span>
+    </div>
+  </footer>
+
+  <script>
+    // DADOS HISTÓRICOS REAIS COMPLETOS POR SEMESTRE (22.1 a 24.2)
+    const seriesHistory = {
+      'ADS_Noite': { name: 'ADS (Noite)', turno: 'Noite', color: '#10b981', vals: [12.44, 9.15, 9.74, 8.15, 12.10, 7.82] },
+      'ADS_Manha': { name: 'ADS (Manhã)', turno: 'Manhã', color: '#38bdf8', vals: [6.55, 4.19, 5.09, 4.14, 7.07, 3.95] },
+      'ADS_Tarde': { name: 'ADS (Tarde)', turno: 'Tarde', color: '#0ea5e9', vals: [5.36, 3.43, 4.09, 3.36, 5.58, 3.56] },
+      'DSM_Noite': { name: 'DSM (Noite)', turno: 'Noite', color: '#8b5cf6', vals: [5.59, 4.32, 5.10, 3.81, 6.18, 3.99] },
+      'DSM_Manha': { name: 'DSM (Manhã)', turno: 'Manhã', color: '#3b82f6', vals: [5.06, 2.63, 2.86, 2.42, 3.93, 2.37] },
+      'DSM_Tarde': { name: 'DSM (Tarde)', turno: 'Tarde', color: '#6366f1', vals: [2.78, 1.94, 1.79, 1.75, 3.50, 2.37] },
+      'GestaoEmp_Tarde': { name: 'Gestão Empresarial (Tarde)', turno: 'Tarde', color: '#f59e0b', vals: [2.31, 1.68, 1.51, 1.40, 2.17, 1.93] },
+      'GestaoEmp_Noite': { name: 'Gestão Empresarial (Noite)', turno: 'Noite', color: '#d97706', vals: [4.95, 3.00, 3.10, 2.52, 3.66, 2.91] },
+      'GestaoEmp_Manha': { name: 'Gestão Empresarial (Manhã)', turno: 'Manhã', color: '#b45309', vals: [2.57, 1.53, 1.51, 1.49, 2.38, 1.62] },
+      'GTI_Manha': { name: 'Gestão da TI (Manhã)', turno: 'Manhã', color: '#14b8a6', vals: [3.78, 2.60, 2.99, 2.23, 4.41, 2.76] },
+      'GTI_Noite': { name: 'Gestão da TI (Noite)', turno: 'Noite', color: '#0d9488', vals: [5.47, 3.54, 4.38, 3.35, 5.19, 3.29] },
+      'RH_Manha': { name: 'Gestão de RH (Manhã)', turno: 'Manhã', color: '#ec4899', vals: [5.34, 2.10, 2.35, 1.89, 2.72, 2.38] },
+      'RH_Noite': { name: 'Gestão de RH (Noite)', turno: 'Noite', color: '#db2777', vals: [6.64, 2.88, 2.79, 2.92, 4.00, 2.88] },
+      'Automacao_Noite': { name: 'Automação Industrial (Noite)', turno: 'Noite', color: '#a855f7', vals: [6.77, 4.48, 3.87, 3.37, 4.85, 4.33] },
+      'Seguranca_Noite': { name: 'Segurança Informação (Noite)', turno: 'Noite', color: '#06b6d4', vals: [6.29, 3.93, 4.65, 3.83, 5.86, 3.99] },
+      'Logistica_Tarde': { name: 'Logística (Tarde)', turno: 'Tarde', color: '#eab308', vals: [2.77, 1.17, 1.14, 1.12, 2.10, 1.46] },
+      'BigDataAgro_Tarde': { name: 'Big Data no Agro (Tarde)', turno: 'Tarde', color: '#84cc16', vals: [2.43, 1.53, 2.00, 1.53, 2.57, 1.68] },
+      'Mecanizacao_Manha': { name: 'Mecanização Agrícola (Manhã)', turno: 'Manhã', color: '#65a30d', vals: [3.10, 1.68, 2.25, 2.30, 3.36, 1.68] },
+      'Mecanizacao_Noite': { name: 'Mecanização Agrícola (Noite)', turno: 'Noite', color: '#4d7c0f', vals: [5.73, 4.55, 4.18, 3.53, 4.83, 3.46] },
+      'CienciaDados_Manha': { name: 'Ciência de Dados (Manhã)', turno: 'Manhã', color: '#0284c7', vals: [3.50, 1.53, 1.95, 1.95, 4.43, 3.43] }
+    };
+
+    const courseData = [
+      // Noite
+      { turno: 'Noite', curso: 'Análise e Desenvolvimento de Sistemas', eixo: 'Informação e Comunicação', media: 9.90, rec24: 9.96, dp: 1.96, qtd: 22.3, status: 'RECOMENDADO', color: '#10b981' },
+      { turno: 'Noite', curso: 'Design de Mídias Digitais', eixo: 'Informação e Comunicação', media: 6.72, rec24: 5.59, dp: 2.27, qtd: 1.0, status: 'Nicho Local', color: '#64748b' },
+      { turno: 'Noite', curso: 'Secretariado e Assessoria Internacional', eixo: 'Gestão e Negócios', media: 6.70, rec24: 5.83, dp: 3.18, qtd: 1.0, status: 'Nicho Local', color: '#64748b' },
+      { turno: 'Noite', curso: 'Gestão Portuária', eixo: 'Infraestrutura', media: 5.41, rec24: 5.74, dp: 1.38, qtd: 1.0, status: 'Nicho Santos', color: '#64748b' },
+      { turno: 'Noite', curso: 'Banco de Dados', eixo: 'Informação e Comunicação', media: 5.30, rec24: 5.56, dp: 0.79, qtd: 2.0, status: 'Especialização', color: '#64748b' },
+      { turno: 'Noite', curso: 'Desenvolvimento de Software Multiplataforma', eixo: 'Informação e Comunicação', media: 4.83, rec24: 5.08, dp: 0.91, qtd: 8.3, status: 'Alta Demanda', color: '#38bdf8' },
+      { turno: 'Noite', curso: 'Segurança da Informação', eixo: 'Informação e Comunicação', media: 4.76, rec24: 4.92, dp: 1.05, qtd: 5.0, status: 'Alta Demanda', color: '#38bdf8' },
+      { turno: 'Noite', curso: 'Automação Industrial', eixo: 'Controle e Processos', media: 4.61, rec24: 4.59, dp: 1.18, qtd: 6.0, status: 'Indústria 4.0', color: '#a855f7' },
+      { turno: 'Noite', curso: 'Gestão Empresarial', eixo: 'Gestão e Negócios', media: 3.36, rec24: 3.28, dp: 0.76, qtd: 18.0, status: 'Alta Escala', color: '#f59e0b' },
+      
+      // Manhã
+      { turno: 'Manhã', curso: 'Análise e Desenvolvimento de Sistemas', eixo: 'Informação e Comunicação', media: 5.16, rec24: 5.51, dp: 1.34, qtd: 23.3, status: 'Líder Geral', color: '#10b981' },
+      { turno: 'Manhã', curso: 'Secretariado e Assessoria Internacional', eixo: 'Gestão e Negócios', media: 3.73, rec24: 3.30, dp: 2.16, qtd: 1.0, status: 'Nicho Local', color: '#64748b' },
+      { turno: 'Manhã', curso: 'Desenvolvimento de Software Multiplataforma', eixo: 'Informação e Comunicação', media: 3.21, rec24: 3.15, dp: 1.07, qtd: 5.2, status: 'RECOMENDADO', color: '#38bdf8' },
+      { turno: 'Manhã', curso: 'Gestão da Tecnologia da Informação', eixo: 'Informação e Comunicação', media: 3.13, rec24: 3.58, dp: 0.81, qtd: 4.3, status: 'Forte Opção', color: '#60a5fa' },
+      { turno: 'Manhã', curso: 'Gestão de Recursos Humanos', eixo: 'Gestão e Negócios', media: 2.80, rec24: 2.55, dp: 1.29, qtd: 5.5, status: 'Opção Gestão', color: '#f59e0b' },
+      { turno: 'Manhã', curso: 'Ciência de Dados', eixo: 'Informação e Comunicação', media: 2.80, rec24: 3.93, dp: 1.07, qtd: 1.0, status: 'Emergente', color: '#38bdf8' },
+      { turno: 'Manhã', curso: 'Mecanização em Agricultura de Precisão', eixo: 'Controle e Processos', media: 2.40, rec24: 2.52, dp: 0.72, qtd: 1.0, status: 'Opção Agro', color: '#84cc16' },
+
+      // Tarde
+      { turno: 'Tarde', curso: 'Análise e Desenvolvimento de Sistemas', eixo: 'Informação e Comunicação', media: 4.23, rec24: 4.57, dp: 1.00, qtd: 13.3, status: 'Líder Geral', color: '#10b981' },
+      { turno: 'Tarde', curso: 'Desenvolvimento de Software Multiplataforma', eixo: 'Informação e Comunicação', media: 2.36, rec24: 2.94, dp: 0.69, qtd: 2.8, status: 'Opção TI', color: '#38bdf8' },
+      { turno: 'Tarde', curso: 'Produção Fonográfica', eixo: 'Produção Cultural', media: 2.33, rec24: 3.11, dp: 0.97, qtd: 1.0, status: 'Nicho Tatuí', color: '#64748b' },
+      { turno: 'Tarde', curso: 'Big Data no Agronegócio', eixo: 'Informação e Comunicação', media: 1.96, rec24: 2.12, dp: 0.46, qtd: 1.0, status: 'Opção Agro', color: '#84cc16' },
+      { turno: 'Tarde', curso: 'Gestão Empresarial', eixo: 'Gestão e Negócios', media: 1.83, rec24: 2.05, dp: 0.36, qtd: 4.0, status: 'RECOMENDADO', color: '#f59e0b' },
+      { turno: 'Tarde', curso: 'Comércio Exterior', eixo: 'Gestão e Negócios', media: 1.71, rec24: 1.96, dp: 0.43, qtd: 2.7, status: 'Gestão', color: '#f59e0b' },
+      { turno: 'Tarde', curso: 'Logística', eixo: 'Gestão e Negócios', media: 1.63, rec24: 1.78, dp: 0.66, qtd: 3.5, status: 'Gestão', color: '#f59e0b' }
+    ];
+
+    let currentShift = 'todos';
+    let currentScenario = 'recomendado';
+
+    function toggleGlossary() {
+      const content = document.getElementById('glossary-content');
+      const btn = document.getElementById('glossary-toggle-btn');
+      if (content.style.display === 'none') {
+        content.style.display = 'grid';
+        btn.innerText = '[Clique para recolher]';
+      } else {
+        content.style.display = 'none';
+        btn.innerText = '[Clique para expandir]';
+      }
+    }
+
+    // RENDERIZAR GRÁFICO DE LINHAS 100% DINÂMICO CONFORME O FILTRO
+    function renderDynamicLineChart() {
+      const wrapper = document.getElementById('line-chart-wrapper');
+      const legendDiv = document.getElementById('line-chart-legend');
+      const titleEl = document.getElementById('line-chart-title');
+      const subtitleEl = document.getElementById('line-chart-subtitle');
+
+      let activeKeys = [];
+      if (currentShift === 'todos') {
+        titleEl.innerText = 'Série Histórica: Comparativo das Escolhas Recomendadas (2022.1 - 2024.2)';
+        subtitleEl.innerText = 'Mostrando ADS (Noite), DSM (Manhã) e Gestão Empresarial (Tarde) vs. Benchmarks';
+        activeKeys = ['ADS_Noite', 'ADS_Manha', 'DSM_Manha', 'GestaoEmp_Tarde', 'DSM_Noite'];
+      } else if (currentShift === 'Manhã') {
+        titleEl.innerText = 'Série Histórica: Principais Cursos do Turno da MANHÃ (2022.1 - 2024.2)';
+        subtitleEl.innerText = 'Comparando ADS, DSM, Gestão da TI, Recursos Humanos e Ciência de Dados';
+        activeKeys = ['ADS_Manha', 'DSM_Manha', 'GTI_Manha', 'RH_Manha', 'CienciaDados_Manha'];
+      } else if (currentShift === 'Tarde') {
+        titleEl.innerText = 'Série Histórica: Principais Cursos do Turno da TARDE (2022.1 - 2024.2)';
+        subtitleEl.innerText = 'Comparando ADS, DSM, Gestão Empresarial, Big Data Agro e Logística';
+        activeKeys = ['ADS_Tarde', 'DSM_Tarde', 'GestaoEmp_Tarde', 'BigDataAgro_Tarde', 'Logistica_Tarde'];
+      } else if (currentShift === 'Noite') {
+        titleEl.innerText = 'Série Histórica: Principais Cursos do Turno da NOITE (2022.1 - 2024.2)';
+        subtitleEl.innerText = 'Comparando ADS, DSM, Automação Industrial, Segurança e Gestão Empresarial';
+        activeKeys = ['ADS_Noite', 'DSM_Noite', 'Automacao_Noite', 'Seguranca_Noite', 'GestaoEmp_Noite'];
+      }
+
+      // Encontrar max Y para escalar dinamicamente
+      let maxVal = 0;
+      activeKeys.forEach(k => {
+        if (seriesHistory[k]) {
+          maxVal = Math.max(maxVal, ...seriesHistory[k].vals);
+        }
+      });
+      maxVal = Math.max(5, Math.ceil(maxVal * 1.15));
+
+      const width = 500;
+      const height = 220;
+      const padLeft = 40;
+      const padRight = 20;
+      const padTop = 20;
+      const padBottom = 30;
+
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      const semesters = ['22.1', '22.2', '23.1', '23.2', '24.1', '24.2'];
+      const xStep = plotW / (semesters.length - 1);
+
+      // SVG inicial
+      let svgHtml = `<svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">`;
+
+      // Grade horizontal
+      const gridSteps = 4;
+      for (let g = 0; g <= gridSteps; g++) {
+        const yVal = (maxVal / gridSteps) * g;
+        const yPos = padTop + plotH - (yVal / maxVal) * plotH;
+        svgHtml += `
+          <line x1="${padLeft}" y1="${yPos}" x2="${width - padRight}" y2="${yPos}" stroke="#1e293b" stroke-dasharray="3,3" />
+          <text x="${padLeft - 8}" y="${yPos + 4}" fill="#64748b" font-size="9" text-anchor="end">${yVal.toFixed(1)}</text>
+        `;
+      }
+
+      // Rótulos X e faixas de sazonalidade
+      semesters.forEach((sem, idx) => {
+        const xPos = padLeft + idx * xStep;
+        svgHtml += `<text x="${xPos}" y="${height - 10}" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">${sem}</text>`;
+      });
+
+      // Desenhar linhas de dados
+      let legendHtml = '';
+      activeKeys.forEach(key => {
+        const s = seriesHistory[key];
+        if (!s) return;
+
+        let points = [];
+        let pointsCoords = [];
+        s.vals.forEach((v, idx) => {
+          const xPos = padLeft + idx * xStep;
+          const yPos = padTop + plotH - (v / maxVal) * plotH;
+          points.push(`${xPos},${yPos}`);
+          pointsCoords.push({ x: xPos, y: yPos, val: v, sem: semesters[idx] });
+        });
+
+        // Polylinha
+        svgHtml += `
+          <polyline fill="none" stroke="${s.color}" stroke-width="2.5" points="${points.join(' ')}" opacity="0.95" />
+        `;
+
+        // Círculos e rótulos
+        pointsCoords.forEach(pt => {
+          svgHtml += `
+            <circle cx="${pt.x}" cy="${pt.y}" r="4" fill="${s.color}" stroke="#0b111e" stroke-width="1.5"
+                    class="cursor-pointer hover:r-6 transition-all"
+                    onmouseover="showLineTooltip(event, '${s.name}', '${pt.sem}', ${pt.val})"
+                    onmouseout="hideLineTooltip()" />
+            <text x="${pt.x}" y="${pt.y - 6}" fill="${s.color}" font-size="8.5" font-weight="bold" text-anchor="middle"
+                  style="paint-order: stroke; stroke: #0b111e; stroke-width: 2px;">
+              ${pt.val.toFixed(1)}
+            </text>
+          `;
+        });
+
+        legendHtml += `
+          <span class="flex items-center gap-1.5 cursor-pointer hover:text-white" onclick="highlightSeries('${key}')">
+            <span class="w-3 h-1 rounded" style="background-color: ${s.color};"></span>
+            <span>${s.name}</span>
+          </span>
+        `;
+      });
+
+      svgHtml += `</svg>`;
+      wrapper.innerHTML = svgHtml;
+      legendDiv.innerHTML = legendHtml;
+    }
+
+    function showLineTooltip(e, name, sem, val) {
+      const tt = document.getElementById('line-tooltip');
+      tt.innerHTML = `<b>${name}</b><br>Vestibular: <span class="text-amber-300 font-bold">${sem}</span><br>Demanda: <span class="text-emerald-400 font-bold">${val.toFixed(2)} C/V</span>`;
+      tt.style.display = 'block';
+      tt.style.left = (e.pageX + 10) + 'px';
+      tt.style.top = (e.pageY - 35) + 'px';
+    }
+
+    function hideLineTooltip() {
+      document.getElementById('line-tooltip').style.display = 'none';
+    }
+
+    // RENDERIZAR TABELA MATRIZ
+    function renderTable() {
+      const tbody = document.getElementById('matrix-tbody');
+      tbody.innerHTML = '';
+
+      let filtered = courseData;
+      if (currentShift !== 'todos') {
+        filtered = filtered.filter(d => d.turno === currentShift);
+      }
+
+      filtered.forEach(d => {
+        const isRec = (d.status === 'RECOMENDADO');
+        const pctBar = Math.min(100, (d.media / 11.0) * 100);
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-slate-800/40 transition-colors ${isRec ? 'bg-slate-800/30 font-medium' : ''}`;
+        
+        let badgeClass = 'bg-slate-800 text-slate-400 border border-slate-700';
+        if (isRec) badgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold';
+        else if (d.status === 'Líder Geral') badgeClass = 'bg-blue-500/20 text-blue-300 border border-blue-500/40';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-3">
+            <span class="inline-flex items-center gap-1.5 font-bold ${d.turno === 'Manhã' ? 'text-blue-400' : d.turno === 'Tarde' ? 'text-amber-400' : 'text-emerald-400'}">
+              ${d.turno === 'Manhã' ? '🌅' : d.turno === 'Tarde' ? '☀️' : '🌙'} ${d.turno}
+            </span>
+          </td>
+          <td class="py-2.5 px-3 text-white font-semibold flex items-center gap-1.5">
+            ${isRec ? '<span title="Curso Escolhido Oficial">⭐</span>' : ''} ${d.curso}
+          </td>
+          <td class="py-2.5 px-3 text-slate-400 text-[11px]">${d.eixo}</td>
+          <td class="py-2.5 px-3 font-bold text-white">${d.media.toFixed(2)} C/V</td>
+          <td class="py-2.5 px-3">
+            <div class="data-bar-container">
+              <div class="data-bar" style="width: ${pctBar}%; background-color: ${d.color};"></div>
+            </div>
+          </td>
+          <td class="py-2.5 px-3 text-slate-300">${d.rec24.toFixed(2)} C/V</td>
+          <td class="py-2.5 px-3 text-slate-400">&plusmn;${d.dp.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-slate-300 font-semibold">${d.qtd.toFixed(1)} un.</td>
+          <td class="py-2.5 px-3">
+            <span class="badge ${badgeClass}">${d.status}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // RENDERIZAR GRÁFICO DE BARRAS
+    function renderBarVisual() {
+      const container = document.getElementById('bar-chart-container');
+      const titleEl = document.getElementById('bar-title');
+      container.innerHTML = '';
+
+      let items = [];
+      if (currentShift === 'todos') {
+        titleEl.innerText = 'Ranking Geral: Top Cursos por Demanda Média C/V';
+        items = [
+          { label: 'Noite: ADS (Líder Absoluto)', val: 9.90, color: '#10b981', rec: true },
+          { label: 'Noite: Secretariado (Nicho 1 un.)', val: 6.70, color: '#64748b' },
+          { label: 'Manhã: ADS (Líder Manhã)', val: 5.16, color: '#38bdf8' },
+          { label: 'Noite: DSM (TI)', val: 4.83, color: '#60a5fa' },
+          { label: 'Tarde: ADS (Líder Tarde)', val: 4.23, color: '#0ea5e9' },
+          { label: 'Manhã: DSM (Escolha Manhã)', val: 3.21, color: '#3b82f6', rec: true },
+          { label: 'Tarde: DSM (Opção Tarde)', val: 2.36, color: '#f59e0b' },
+          { label: 'Tarde: Gestão Emp. (Escolha Tarde)', val: 1.83, color: '#eab308', rec: true }
+        ];
+      } else {
+        titleEl.innerText = `Ranking Específico: Top Cursos do Turno ${currentShift.toUpperCase()}`;
+        const filtered = courseData.filter(d => d.turno === currentShift).slice(0, 7);
+        items = filtered.map(d => ({
+          label: d.curso.length > 25 ? d.curso.substring(0, 24) + '...' : d.curso,
+          val: d.media,
+          color: d.color,
+          rec: d.status === 'RECOMENDADO'
+        }));
+      }
+
+      items.forEach(item => {
+        const pct = Math.min(100, (item.val / 10.5) * 100);
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-2 py-0.5';
+        row.innerHTML = `
+          <div class="w-44 text-right truncate text-[11px] ${item.rec ? 'font-bold text-white' : 'text-slate-400'}">
+            ${item.rec ? '⭐ ' : ''}${item.label}
+          </div>
+          <div class="flex-1 bg-slate-800/80 h-5 rounded overflow-hidden relative flex items-center">
+            <div class="h-full rounded transition-all duration-500" style="width: ${pct}%; background-color: ${item.color};"></div>
+            <span class="absolute right-2 text-[10px] font-bold text-white">${item.val.toFixed(2)} C/V</span>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // ALTERNAR TURNO
+    function setShift(shift, btn) {
+      currentShift = shift;
+      document.querySelectorAll('#shift-filters .slicer-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTable();
+      renderBarVisual();
+      renderDynamicLineChart(); // Atualiza o gráfico de linhas!
+    }
+
+    // ALTERNAR CENÁRIO
+    function setScenario(scen, btn) {
+      currentScenario = scen;
+      document.querySelectorAll('#scenario-filters .slicer-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const kpiMan = document.getElementById('kpi-man-course');
+      const kpiManDem = document.getElementById('kpi-man-dem');
+      const kpiTar = document.getElementById('kpi-tar-course');
+      const kpiTarDem = document.getElementById('kpi-tar-dem');
+      const kpiNoi = document.getElementById('kpi-noi-course');
+      const kpiNoiDem = document.getElementById('kpi-noi-dem');
+      const kpiTotDem = document.getElementById('kpi-tot-dem');
+
+      if (scen === 'recomendado') {
+        kpiMan.innerText = 'DSM (Software Multiplataforma)';
+        kpiManDem.innerText = '3.21';
+        kpiTar.innerText = 'Gestão Empresarial';
+        kpiTarDem.innerText = '1.83';
+        kpiNoi.innerText = 'ADS (Análise e Desenv. Sist.)';
+        kpiNoiDem.innerText = '9.90';
+        kpiTotDem.innerText = '14.94';
+      } else if (scen === 'demanda_pura') {
+        kpiMan.innerText = 'ADS (Análise e Desenv. Sist.)';
+        kpiManDem.innerText = '5.16';
+        kpiTar.innerText = 'ADS (Análise e Desenv. Sist.)';
+        kpiTarDem.innerText = '4.23';
+        kpiNoi.innerText = 'ADS (Análise e Desenv. Sist.)';
+        kpiNoiDem.innerText = '9.90';
+        kpiTotDem.innerText = '19.29';
+      } else if (scen === 'agro') {
+        kpiMan.innerText = 'Mecanização Agrícola Precisão';
+        kpiManDem.innerText = '2.40';
+        kpiTar.innerText = 'Big Data no Agronegócio';
+        kpiTarDem.innerText = '1.96';
+        kpiNoi.innerText = 'ADS ou Mecanização Noite';
+        kpiNoiDem.innerText = '4.50';
+        kpiTotDem.innerText = '8.86';
+      }
+      renderDynamicLineChart();
+    }
+
+    // Inicialização
+    renderTable();
+    renderBarVisual();
+    renderDynamicLineChart();
+  </script>
+</body>
+</html>
+"""
+
+# Salva na pasta do projeto e na pasta de artefatos
+out_project = r'C:\Users\PICHAU\.gemini\antigravity\scratch\trabalho_vestibular\painel_powerbi.html'
+out_artifact = r'C:\Users\PICHAU\.gemini\antigravity\brain\fede3023-63c1-42db-824f-ab771fa6007a\painel_powerbi.html'
+
+with open(out_project, 'w', encoding='utf-8') as f:
+    f.write(html_code)
+
+with open(out_artifact, 'w', encoding='utf-8') as f:
+    f.write(html_code)
+
+print("Painel Power BI atualizado com Gráfico de Linhas Dinâmico e Glossário de C/V!")
