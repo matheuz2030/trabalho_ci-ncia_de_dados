@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Power BI - FATEC Demanda Vestibular | Painel de Alocação de Cursos (Rio Preto & População)</title>
+  <title>Power BI - FATEC Demanda Vestibular | Painel de Decisão Estratégica (Rio Preto & População)</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     body {
@@ -134,7 +134,7 @@
     </div>
     <div class="flex flex-wrap items-center gap-2">
       <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-right">
-        <div class="text-[10px] text-slate-400 uppercase font-semibold">População Selecionada</div>
+        <div class="text-[10px] text-slate-400 uppercase font-semibold">Porte / Cidade Ativa</div>
         <div class="text-sm font-bold text-cyan-400" id="header-pop-name">Rio Preto (200k-600k)</div>
       </div>
       <div class="bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg text-right">
@@ -144,7 +144,7 @@
     </div>
   </header>
 
-  <!-- SEGMENTADORES (SLICERS) POWER BI -->
+  <!-- BARRA DE SEGMENTADORES (SLICERS) ESTILO POWER BI -->
   <div class="pbi-card p-3 mb-4 space-y-3">
     <!-- Linha 1: Filtro de População -->
     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-2.5">
@@ -159,7 +159,7 @@
           <button class="slicer-btn pop-btn" onclick="setPopTier('ate_500', this)">Até 500 mil hab. (Aba Até 500)</button>
           <button class="slicer-btn pop-btn" onclick="setPopTier('faixa_100_600', this)">100 a 600 mil hab.</button>
           <button class="slicer-btn pop-btn" onclick="setPopTier('pequenas_ate_200', this)">
-            🌾 Cidades Pequenas / Agro (Até 100k e 200k hab.*)
+            🌾 Cidades Pequenas & Agro (Até 100k e 200k hab.*)
           </button>
           <button class="slicer-btn pop-btn" onclick="setPopTier('todos', this)">🌐 Todos (Estado Geral)</button>
         </div>
@@ -183,9 +183,8 @@
         </div>
       </div>
 
-      <!-- Nota Técnica sobre Até 100 e Até 200 -->
       <div class="text-[11px] text-slate-400 italic flex items-center gap-1.5" id="note-pop-explanation">
-        <span>💡 <i>Dica: Clique em qualquer curso no ranking para destacar sua série histórica!</i></span>
+        <span>💡 <i>Dica: Clique em qualquer turno ou curso para ver a sincronização instantânea em toda a tela!</i></span>
       </div>
     </div>
   </div>
@@ -196,68 +195,73 @@
     <span><b>Nota Técnica sobre o Excel original:</b> As abas <i>"Até 100"</i> e <i>"Até 200"</i> da planilha fornecida possuem exatamente as mesmas 232 linhas de dados (apenas reordenadas), pois todos os campi abaixo de 200k habitantes situam-se em municípios de até 100k habitantes. Por isso foram agrupadas aqui para evitar confusão!</span>
   </div>
 
-  <!-- CARDS DE KPI DINÂMICOS -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-    <div class="pbi-card p-4 border-l-4 border-l-blue-500 relative overflow-hidden">
+  <!-- CARDS DE KPI 100% DINÂMICOS (SE ADAPTAM AO TURNO E À POPULAÇÃO) -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="kpi-cards-grid">
+    
+    <!-- Card 1 -->
+    <div class="pbi-card p-4 border-l-4 border-l-blue-500 relative overflow-hidden" id="card-1-container">
       <div class="flex justify-between items-start mb-1">
-        <span class="kpi-title text-blue-400">🌅 Manhã (1º Escolha)</span>
-        <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30" id="kpi-man-badge">Recomendado</span>
+        <span class="kpi-title text-blue-400" id="card-1-title">🌅 Manhã (Recomendado)</span>
+        <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30" id="card-1-badge">1º Escolha</span>
       </div>
-      <div class="text-lg font-bold text-white truncate" id="kpi-man-course">DSM (Software Multiplataforma)</div>
+      <div class="text-base font-bold text-white truncate" id="card-1-course">DSM (Software Multiplataforma)</div>
       <div class="flex items-baseline gap-2 mt-2">
-        <span class="kpi-value text-blue-400" id="kpi-man-dem">2.82</span>
-        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+        <span class="kpi-value text-blue-400" id="card-1-dem">2.82</span>
+        <span class="text-xs text-slate-400">C/V</span>
       </div>
-      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="kpi-man-sub">
-        <span>2º Opção: <b class="text-white" id="kpi-man-opt2">GTI (4.77 C/V)</b></span>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="card-1-sub">
+        <span>2º Opção: <b class="text-white">GTI (4.77 C/V)</b></span>
         <span class="text-emerald-400 font-semibold">100% Sinergia</span>
       </div>
     </div>
 
-    <div class="pbi-card p-4 border-l-4 border-l-amber-500 relative overflow-hidden">
+    <!-- Card 2 -->
+    <div class="pbi-card p-4 border-l-4 border-l-amber-500 relative overflow-hidden" id="card-2-container">
       <div class="flex justify-between items-start mb-1">
-        <span class="kpi-title text-amber-400">☀️ Tarde (1º Escolha)</span>
-        <span class="badge bg-amber-500/20 text-amber-300 border border-amber-500/30" id="kpi-tar-badge">Recomendado</span>
+        <span class="kpi-title text-amber-400" id="card-2-title">☀️ Tarde (Recomendado)</span>
+        <span class="badge bg-amber-500/20 text-amber-300 border border-amber-500/30" id="card-2-badge">1º Escolha</span>
       </div>
-      <div class="text-lg font-bold text-white truncate" id="kpi-tar-course">Gestão Empresarial</div>
+      <div class="text-base font-bold text-white truncate" id="card-2-course">Gestão Empresarial</div>
       <div class="flex items-baseline gap-2 mt-2">
-        <span class="kpi-value text-amber-400" id="kpi-tar-dem">1.78</span>
-        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+        <span class="kpi-value text-amber-400" id="card-2-dem">1.78</span>
+        <span class="text-xs text-slate-400">C/V</span>
       </div>
-      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="kpi-tar-sub">
-        <span>2º Opção: <b class="text-white" id="kpi-tar-opt2">DSM (2.82 C/V)</b></span>
-        <span class="text-blue-300 font-semibold">Turno Protegido</span>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="card-2-sub">
+        <span>2º Opção: <b class="text-white">DSM (2.82 C/V)</b></span>
+        <span class="text-blue-300 font-semibold">Protege Turno</span>
       </div>
     </div>
 
-    <div class="pbi-card p-4 border-l-4 border-l-emerald-500 relative overflow-hidden">
+    <!-- Card 3 -->
+    <div class="pbi-card p-4 border-l-4 border-l-emerald-500 relative overflow-hidden" id="card-3-container">
       <div class="flex justify-between items-start mb-1">
-        <span class="kpi-title text-emerald-400">🌙 Noite (1º Escolha)</span>
-        <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Líder Absoluto</span>
+        <span class="kpi-title text-emerald-400" id="card-3-title">🌙 Noite (Recomendado)</span>
+        <span class="badge bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="card-3-badge">Líder Absoluto</span>
       </div>
-      <div class="text-lg font-bold text-white truncate" id="kpi-noi-course">ADS (Análise e Desenv. Sist.)</div>
+      <div class="text-base font-bold text-white truncate" id="card-3-course">ADS (Análise e Desenv. Sist.)</div>
       <div class="flex items-baseline gap-2 mt-2">
-        <span class="kpi-value text-emerald-400" id="kpi-noi-dem">11.61</span>
-        <span class="text-xs text-slate-400">C/V (Candidatos/Vaga)</span>
+        <span class="kpi-value text-emerald-400" id="card-3-dem">11.61</span>
+        <span class="text-xs text-slate-400">C/V</span>
       </div>
-      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="kpi-noi-sub">
-        <span>2º Opção: <b class="text-white" id="kpi-noi-opt2">GTI (6.01 C/V)</b></span>
-        <span class="text-amber-400 font-bold">Recorde de Demanda</span>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="card-3-sub">
+        <span>2º Opção: <b class="text-white">GTI (6.01 C/V)</b></span>
+        <span class="text-amber-400 font-bold">Recorde Regional</span>
       </div>
     </div>
 
-    <div class="pbi-card p-4 border-l-4 border-l-purple-500 relative overflow-hidden">
+    <!-- Card 4 -->
+    <div class="pbi-card p-4 border-l-4 border-l-purple-500 relative overflow-hidden" id="card-4-container">
       <div class="flex justify-between items-start mb-1">
-        <span class="kpi-title text-purple-400">📊 Portfólio do Campus</span>
-        <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">3 Cursos</span>
+        <span class="kpi-title text-purple-400" id="card-4-title">📊 Portfólio Integrado</span>
+        <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30" id="card-4-badge">3 Turnos</span>
       </div>
-      <div class="text-lg font-bold text-white truncate" id="kpi-tot-course">Capacidade Plena</div>
+      <div class="text-base font-bold text-white truncate" id="card-4-course">Capacidade Plena</div>
       <div class="flex items-baseline gap-2 mt-2">
-        <span class="kpi-value text-purple-400" id="kpi-tot-dem">16.21</span>
+        <span class="kpi-value text-purple-400" id="card-4-dem">16.21</span>
         <span class="text-xs text-slate-400">C/V Acumulados</span>
       </div>
-      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2">
-        <span>Ociosidade de Vagas: <b class="text-emerald-400">0%</b></span>
+      <div class="mt-2 text-xs text-slate-300 flex justify-between border-t border-slate-800 pt-2" id="card-4-sub">
+        <span>Ociosidade: <b class="text-emerald-400">0%</b></span>
         <span>Retenção: <b class="text-emerald-400">Máxima</b></span>
       </div>
     </div>
@@ -433,7 +437,7 @@
             <th class="py-2.5 px-3">Demanda 2024</th>
             <th class="py-2.5 px-3">Desvio (&sigma;)</th>
             <th class="py-2.5 px-3">Qtd Unidades</th>
-            <th class="py-2.5 px-3">Prioridade de Abertura</th>
+            <th class="py-2.5 px-3">Classificação no Turno</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-800/60" id="matrix-tbody">
@@ -458,7 +462,7 @@
 
     let currentPopTier = 'rio_preto';
     let currentShift = 'todos';
-    let selectedCourseKey = null; // Para interação cruzada!
+    let selectedCourseKey = null;
 
     const colorsPalette = ['#10b981', '#38bdf8', '#f59e0b', '#a855f7', '#ec4899', '#14b8a6', '#6366f1', '#eab308'];
 
@@ -476,7 +480,7 @@
 
     function setPopTier(tierKey, btn) {
       currentPopTier = tierKey;
-      selectedCourseKey = null; // Reset seleção de curso
+      selectedCourseKey = null;
       document.querySelectorAll('#pop-filters .pop-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
@@ -484,7 +488,6 @@
       document.getElementById('active-sheet-indicator').innerText = tierInfo.sheet;
       document.getElementById('footer-sheet').innerText = tierInfo.sheet;
 
-      // Alerta para cidades pequenas
       const alertSmall = document.getElementById('alert-small-cities');
       if (tierKey === 'pequenas_ate_200') {
         alertSmall.classList.remove('hidden');
@@ -507,6 +510,7 @@
         }
       }
 
+      // ATUALIZA TUDO SINCRONIZADO!
       updateKpis();
       updateJustifications();
       renderRankingPodium();
@@ -520,6 +524,9 @@
       document.querySelectorAll('#shift-filters .slicer-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
+      // ATUALIZA TUDO SINCRONIZADO!
+      updateKpis();
+      updateJustifications();
       renderRankingPodium();
       renderDynamicLineChart();
       renderTable();
@@ -539,76 +546,168 @@
       renderTable();
     }
 
-    // ATUALIZAÇÃO DOS KPIS
+    // ATUALIZAÇÃO DOS 4 CARDS DE KPI (SINCRONIZADOS COM O TURNO SELECIONADO!)
     function updateKpis() {
       const tier = allPopData[currentPopTier];
       const courses = tier.courses;
 
-      const kpiManCourse = document.getElementById('kpi-man-course');
-      const kpiManDem = document.getElementById('kpi-man-dem');
-      const kpiManOpt2 = document.getElementById('kpi-man-opt2');
+      const c1Title = document.getElementById('card-1-title');
+      const c1Badge = document.getElementById('card-1-badge');
+      const c1Course = document.getElementById('card-1-course');
+      const c1Dem = document.getElementById('card-1-dem');
+      const c1Sub = document.getElementById('card-1-sub');
 
-      const kpiTarCourse = document.getElementById('kpi-tar-course');
-      const kpiTarDem = document.getElementById('kpi-tar-dem');
-      const kpiTarOpt2 = document.getElementById('kpi-tar-opt2');
+      const c2Title = document.getElementById('card-2-title');
+      const c2Badge = document.getElementById('card-2-badge');
+      const c2Course = document.getElementById('card-2-course');
+      const c2Dem = document.getElementById('card-2-dem');
+      const c2Sub = document.getElementById('card-2-sub');
 
-      const kpiNoiCourse = document.getElementById('kpi-noi-course');
-      const kpiNoiDem = document.getElementById('kpi-noi-dem');
-      const kpiNoiOpt2 = document.getElementById('kpi-noi-opt2');
+      const c3Title = document.getElementById('card-3-title');
+      const c3Badge = document.getElementById('card-3-badge');
+      const c3Course = document.getElementById('card-3-course');
+      const c3Dem = document.getElementById('card-3-dem');
+      const c3Sub = document.getElementById('card-3-sub');
 
-      const kpiTotDem = document.getElementById('kpi-tot-dem');
+      const c4Title = document.getElementById('card-4-title');
+      const c4Badge = document.getElementById('card-4-badge');
+      const c4Course = document.getElementById('card-4-course');
+      const c4Dem = document.getElementById('card-4-dem');
+      const c4Sub = document.getElementById('card-4-sub');
 
       const findCourse = (turno, name) => courses.find(c => c.turno === turno && c.curso.includes(name));
+      const getShiftList = (turno) => courses.filter(c => c.turno === turno && c.semestres >= 3).sort((a,b) => b.media - a.media);
 
-      let adsNoite = findCourse('Noite', 'Análise e Desenvolvimento');
-      let gtiNoite = findCourse('Noite', 'Gestão da Tecnologia');
-      let dsmNoite = findCourse('Noite', 'Desenvolvimento de Software');
+      if (currentShift === 'todos') {
+        // VISÃO DOS 3 TURNOS DO CAMPUS
+        c1Title.innerText = '🌅 Manhã (1º Escolha)';
+        c1Badge.innerText = 'Sinergia TI';
+        let manhaRec = (currentPopTier === 'pequenas_ate_200') ? findCourse('Manhã', 'Mecanização') : findCourse('Manhã', 'Desenvolvimento de Software');
+        let manhaOpt2 = findCourse('Manhã', 'Gestão da Tecnologia') || findCourse('Manhã', 'Recursos Humanos');
+        c1Course.innerText = manhaRec ? manhaRec.curso : 'DSM (Software Multiplataforma)';
+        c1Dem.innerText = manhaRec ? manhaRec.media.toFixed(2) : '2.82';
+        c1Sub.innerHTML = `<span>2º Opção: <b class="text-white">${manhaOpt2 ? manhaOpt2.curso.substring(0, 15) + ' (' + manhaOpt2.media.toFixed(2) + ')' : 'GTI (4.77)'}</b></span><span class="text-emerald-400 font-semibold">100% Sinergia</span>`;
 
-      let adsManha = findCourse('Manhã', 'Análise e Desenvolvimento');
-      let dsmManha = findCourse('Manhã', 'Desenvolvimento de Software');
-      let gtiManha = findCourse('Manhã', 'Gestão da Tecnologia');
-      let mecaManha = findCourse('Manhã', 'Mecanização em Agricultura');
+        c2Title.innerText = '☀️ Tarde (1º Escolha)';
+        c2Badge.innerText = 'Turno Crítico';
+        let tardeRec = (currentPopTier === 'pequenas_ate_200') ? findCourse('Tarde', 'Agronegócio') : findCourse('Tarde', 'Gestão Empresarial');
+        let tardeOpt2 = findCourse('Tarde', 'Desenvolvimento de Software') || findCourse('Tarde', 'Comércio');
+        c2Course.innerText = tardeRec ? tardeRec.curso : 'Gestão Empresarial';
+        c2Dem.innerText = tardeRec ? tardeRec.media.toFixed(2) : '1.78';
+        c2Sub.innerHTML = `<span>2º Opção: <b class="text-white">${tardeOpt2 ? tardeOpt2.curso.substring(0, 15) + ' (' + tardeOpt2.media.toFixed(2) + ')' : 'DSM (2.82)'}</b></span><span class="text-blue-300 font-semibold">Protege Turno</span>`;
 
-      let adsTarde = findCourse('Tarde', 'Análise e Desenvolvimento');
-      let gestaoTarde = findCourse('Tarde', 'Gestão Empresarial');
-      let dsmTarde = findCourse('Tarde', 'Desenvolvimento de Software');
-      let agroTarde = findCourse('Tarde', 'Big Data no Agronegócio');
+        c3Title.innerText = '🌙 Noite (1º Escolha)';
+        c3Badge.innerText = 'Líder Estadual';
+        let noiteRec = findCourse('Noite', 'Análise e Desenvolvimento');
+        let noiteOpt2 = findCourse('Noite', 'Gestão da Tecnologia') || findCourse('Noite', 'Desenvolvimento de Software');
+        c3Course.innerText = noiteRec ? noiteRec.curso : 'ADS (Análise e Desenv. Sist.)';
+        c3Dem.innerText = noiteRec ? noiteRec.media.toFixed(2) : '11.61';
+        c3Sub.innerHTML = `<span>2º Opção: <b class="text-white">${noiteOpt2 ? noiteOpt2.curso.substring(0, 15) + ' (' + noiteOpt2.media.toFixed(2) + ')' : 'GTI (6.01)'}</b></span><span class="text-amber-400 font-bold">Recorde Regional</span>`;
 
-      if (currentPopTier === 'pequenas_ate_200') {
-        kpiManCourse.innerText = mecaManha ? 'Mecanização Agrícola (Manhã)' : 'ADS (Manhã)';
-        kpiManDem.innerText = mecaManha ? mecaManha.media.toFixed(2) : '2.40';
-        kpiManOpt2.innerText = dsmManha ? `DSM (${dsmManha.media.toFixed(2)} C/V)` : 'DSM (2.19 C/V)';
+        c4Title.innerText = '📊 Portfólio Integrado';
+        c4Badge.innerText = '3 Turnos';
+        c4Course.innerText = 'Capacidade Plena';
+        let mVal = manhaRec ? manhaRec.media : 2.82;
+        let tVal = tardeRec ? tardeRec.media : 1.78;
+        let nVal = noiteRec ? noiteRec.media : 11.61;
+        c4Dem.innerText = (mVal + tVal + nVal).toFixed(2);
+        c4Sub.innerHTML = `<span>Ociosidade: <b class="text-emerald-400">0%</b></span><span>Retenção: <b class="text-emerald-400">Máxima</b></span>`;
 
-        kpiTarCourse.innerText = agroTarde ? 'Big Data no Agro (Tarde)' : 'Gestão Empresarial';
-        kpiTarDem.innerText = agroTarde ? agroTarde.media.toFixed(2) : '1.96';
-        kpiTarOpt2.innerText = gestaoTarde ? `Gestão (${gestaoTarde.media.toFixed(2)} C/V)` : 'Gestão (1.86 C/V)';
+      } else if (currentShift === 'Manhã') {
+        // CARDS FOCADOS EXCLUSIVAMENTE NA MANHÃ
+        const topM = getShiftList('Manhã');
+        const c1 = topM[0] || { curso: 'ADS (Manhã)', media: 4.91 };
+        const c2 = topM[1] || { curso: 'GTI (Manhã)', media: 4.77 };
+        const c3 = courses.find(c => c.turno === 'Manhã' && c.curso.includes('Desenvolvimento')) || topM[2] || { curso: 'DSM (Manhã)', media: 2.82 };
+        const avgM = (topM.reduce((acc, c) => acc + c.media, 0) / Math.max(1, topM.length)).toFixed(2);
 
-        kpiNoiCourse.innerText = 'ADS (Noite)';
-        kpiNoiDem.innerText = adsNoite ? adsNoite.media.toFixed(2) : '4.50';
-        kpiNoiOpt2.innerText = 'Mecanização (4.38 C/V)';
+        c1Title.innerText = '🥇 1º Lugar em Demanda Pura';
+        c1Badge.innerText = 'Maior Concorrência';
+        c1Course.innerText = c1.curso;
+        c1Dem.innerText = c1.media.toFixed(2);
+        c1Sub.innerHTML = `<span>Alocação: <b class="text-amber-300">Recomendado na Noite</b></span><span class="text-blue-300 font-mono">Manhã</span>`;
 
-        let m = mecaManha ? mecaManha.media : 2.40;
-        let t = agroTarde ? agroTarde.media : 1.96;
-        let n = adsNoite ? adsNoite.media : 4.50;
-        kpiTotDem.innerText = (m + t + n).toFixed(2);
-      } else {
-        // Rio Preto e cidades médias
-        kpiManCourse.innerText = dsmManha ? 'DSM (Software Multiplataforma)' : 'ADS (Manhã)';
-        kpiManDem.innerText = dsmManha ? dsmManha.media.toFixed(2) : '2.82';
-        kpiManOpt2.innerText = gtiManha ? `GTI (${gtiManha.media.toFixed(2)} C/V)` : 'GTI (4.77 C/V)';
+        c2Title.innerText = '🥈 2º Lugar em Demanda';
+        c2Badge.innerText = 'Forte Alternativa';
+        c2Course.innerText = c2.curso;
+        c2Dem.innerText = c2.media.toFixed(2);
+        c2Sub.innerHTML = `<span>Eixo: <b class="text-white">${c2.eixo || 'Tecnologia'}</b></span><span class="text-blue-300 font-mono">Manhã</span>`;
 
-        kpiTarCourse.innerText = gestaoTarde ? 'Gestão Empresarial (Tarde)' : 'DSM (Tarde)';
-        kpiTarDem.innerText = gestaoTarde ? gestaoTarde.media.toFixed(2) : '1.78';
-        kpiTarOpt2.innerText = dsmTarde ? `DSM (${dsmTarde.media.toFixed(2)} C/V)` : 'DSM (2.82 C/V)';
+        c3Title.innerText = '⭐ Escolha Recomendada (Sinergia)';
+        c3Badge.innerText = 'Recomendação Oficial';
+        c3Course.innerText = c3.curso;
+        c3Dem.innerText = c3.media.toFixed(2);
+        c3Sub.innerHTML = `<span>Justificativa: <b class="text-emerald-400">Mesmos Labs de ADS</b></span><span class="text-blue-300 font-mono">Manhã</span>`;
 
-        kpiNoiCourse.innerText = 'ADS (Análise e Desenv. Sist.)';
-        kpiNoiDem.innerText = adsNoite ? adsNoite.media.toFixed(2) : '11.61';
-        kpiNoiOpt2.innerText = gtiNoite ? `GTI (${gtiNoite.media.toFixed(2)} C/V)` : (dsmNoite ? `DSM (${dsmNoite.media.toFixed(2)} C/V)` : 'GTI (6.01 C/V)');
+        c4Title.innerText = '📈 Média do Turno da Manhã';
+        c4Badge.innerText = `${topM.length} Cursos Ativos`;
+        c4Course.innerText = `Faixa: ${tier.sheet}`;
+        c4Dem.innerText = avgM;
+        c4Sub.innerHTML = `<span>Demanda média matutina</span><span class="text-emerald-400 font-semibold">Consolidada</span>`;
 
-        let m = dsmManha ? dsmManha.media : 2.82;
-        let t = gestaoTarde ? gestaoTarde.media : 1.78;
-        let n = adsNoite ? adsNoite.media : 11.61;
-        kpiTotDem.innerText = (m + t + n).toFixed(2);
+      } else if (currentShift === 'Tarde') {
+        // CARDS FOCADOS EXCLUSIVAMENTE NA TARDE
+        const topT = getShiftList('Tarde');
+        const c1 = topT[0] || { curso: 'ADS (Tarde)', media: 4.90 };
+        const c2 = courses.find(c => c.turno === 'Tarde' && (c.curso.includes('Gestão') || c.curso.includes('Agronegócio'))) || topT[1] || { curso: 'Gestão Empresarial', media: 1.78 };
+        const c3 = courses.find(c => c.turno === 'Tarde' && c.curso.includes('Desenvolvimento')) || topT[2] || { curso: 'DSM (Tarde)', media: 2.82 };
+        const avgT = (topT.reduce((acc, c) => acc + c.media, 0) / Math.max(1, topT.length)).toFixed(2);
+
+        c1Title.innerText = '🥇 1º Lugar em Demanda Pura';
+        c1Badge.innerText = 'Maior Concorrência';
+        c1Course.innerText = c1.curso;
+        c1Dem.innerText = c1.media.toFixed(2);
+        c1Sub.innerHTML = `<span>Alocação: <b class="text-amber-300">Recomendado na Noite</b></span><span class="text-amber-400 font-mono">Tarde</span>`;
+
+        c2Title.innerText = '⭐ Escolha Recomendada (Proteção)';
+        c2Badge.innerText = 'Recomendação Oficial';
+        c2Course.innerText = c2.curso;
+        c2Dem.innerText = c2.media.toFixed(2);
+        c2Sub.innerHTML = `<span>Justificativa: <b class="text-emerald-400">Protege Turno Crítico</b></span><span class="text-amber-400 font-mono">Tarde</span>`;
+
+        c3Title.innerText = '🥈 Forte Alternativa em TI';
+        c3Badge.innerText = 'Opção TI Tarde';
+        c3Course.innerText = c3.curso;
+        c3Dem.innerText = c3.media.toFixed(2);
+        c3Sub.innerHTML = `<span>Eixo: <b class="text-white">Informação & Comunicação</b></span><span class="text-amber-400 font-mono">Tarde</span>`;
+
+        c4Title.innerText = '📈 Média do Turno da Tarde';
+        c4Badge.innerText = `${topT.length} Cursos Ativos`;
+        c4Course.innerText = `Faixa: ${tier.sheet}`;
+        c4Dem.innerText = avgT;
+        c4Sub.innerHTML = `<span>Média histórica vespertina</span><span class="text-amber-400 font-semibold">Turno Crítico</span>`;
+
+      } else if (currentShift === 'Noite') {
+        // CARDS FOCADOS EXCLUSIVAMENTE NA NOITE
+        const topN = getShiftList('Noite');
+        const c1 = topN[0] || { curso: 'ADS (Noite)', media: 11.61 };
+        const c2 = topN[1] || { curso: 'GTI (Noite)', media: 6.01 };
+        const c3 = topN[2] || { curso: 'DSM (Noite)', media: 5.78 };
+        const avgN = (topN.reduce((acc, c) => acc + c.media, 0) / Math.max(1, topN.length)).toFixed(2);
+
+        c1Title.innerText = '🥇 1º Lugar Noite (Líder Absoluto)';
+        c1Badge.innerText = 'Recomendação Oficial';
+        c1Course.innerText = c1.curso;
+        c1Dem.innerText = c1.media.toFixed(2);
+        c1Sub.innerHTML = `<span>Justificativa: <b class="text-emerald-400">Recorde de Inscritos</b></span><span class="text-emerald-400 font-mono">Noite</span>`;
+
+        c2Title.innerText = '🥈 2º Lugar Noite';
+        c2Badge.innerText = 'Forte Alternativa';
+        c2Course.innerText = c2.curso;
+        c2Dem.innerText = c2.media.toFixed(2);
+        c2Sub.innerHTML = `<span>Eixo: <b class="text-white">${c2.eixo || 'TI'}</b></span><span class="text-emerald-400 font-mono">Noite</span>`;
+
+        c3Title.innerText = '🥉 3º Lugar Noite';
+        c3Badge.innerText = 'Opção TI';
+        c3Course.innerText = c3.curso;
+        c3Dem.innerText = c3.media.toFixed(2);
+        c3Sub.innerHTML = `<span>Eixo: <b class="text-white">${c3.eixo || 'TI'}</b></span><span class="text-emerald-400 font-mono">Noite</span>`;
+
+        c4Title.innerText = '📈 Média do Turno da Noite';
+        c4Badge.innerText = `${topN.length} Cursos Ativos`;
+        c4Course.innerText = `Faixa: ${tier.sheet}`;
+        c4Dem.innerText = avgN;
+        c4Sub.innerHTML = `<span>Demanda média noturna</span><span class="text-emerald-400 font-semibold">Alta Procura</span>`;
       }
     }
 
@@ -649,7 +748,7 @@
       }
     }
 
-    // RENDERIZAR O RANKING DE ABERTURA CLARO (PÓDIO 1º, 2º, 3º LUGAR)
+    // RENDERIZAR O RANKING DE ABERTURA CLARO (PÓDIO 1º, 2º, 3º LUGAR COM IDENTIFICAÇÃO)
     function renderRankingPodium() {
       const container = document.getElementById('ranking-list-container');
       const titleEl = document.getElementById('ranking-title');
@@ -659,16 +758,11 @@
       const tier = allPopData[currentPopTier];
       let courses = [...tier.courses];
 
-      // Título e filtro
       if (currentShift === 'todos') {
         titleEl.innerHTML = `🏆 Pódio de Abertura do Campus: 1 Curso por Período (${tier.sheet})`;
         subtitleEl.innerHTML = `Recomendação oficial e alternativas para compor os 3 turnos da faculdade`;
 
-        // Montar os líderes de cada turno
-        const getTopForShift = (turno) => {
-          let cList = courses.filter(c => c.turno === turno && c.semestres >= 3).sort((a,b) => b.media - a.media);
-          return cList;
-        };
+        const getTopForShift = (turno) => courses.filter(c => c.turno === turno && c.semestres >= 3).sort((a,b) => b.media - a.media);
 
         const topNoite = getTopForShift('Noite');
         const topManha = getTopForShift('Manhã');
@@ -676,12 +770,12 @@
 
         // Itens estruturados do pódio
         const podiumItems = [
-          { rankLabel: '🥇 1º ESCOLHA (NOITE)', item: topNoite[0], role: 'Abertura Noturna (Flagship)', badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
-          { rankLabel: '🥇 1º ESCOLHA (MANHÃ)', item: (topManha[1] && currentPopTier !== 'pequenas_ate_200') ? topManha[1] : topManha[0], role: 'Abertura Matutina (Sinergia)', badgeBg: 'bg-blue-500/20 text-blue-300 border-blue-500/40' },
-          { rankLabel: '🥇 1º ESCOLHA (TARDE)', item: (currentPopTier === 'pequenas_ate_200' ? (courses.find(c => c.turno === 'Tarde' && c.curso.includes('Agronegócio')) || topTarde[0]) : (courses.find(c => c.turno === 'Tarde' && c.curso.includes('Gestão')) || topTarde[1])), role: 'Abertura Vespertina (Proteção)', badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40' },
-          { rankLabel: '🥈 2º Opção Noite', item: topNoite[1], role: 'Alternativa Noturna', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
-          { rankLabel: '🥈 2º Opção Manhã', item: (topManha[2] || topManha[1]), role: 'Alternativa Matutina', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
-          { rankLabel: '🥈 2º Opção Tarde', item: (topTarde[1] || topTarde[0]), role: 'Alternativa Vespertina', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
+          { rankLabel: '🥇 1º ESCOLHA (NOITE)', item: topNoite[0], role: 'Abertura Noturna (Flagship Estadual)', badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
+          { rankLabel: '🥇 1º ESCOLHA (MANHÃ)', item: (currentPopTier === 'pequenas_ate_200') ? topManha[0] : (courses.find(c => c.turno === 'Manhã' && c.curso.includes('Desenvolvimento')) || topManha[1]), role: 'Abertura Matutina (100% Sinergia Labs)', badgeBg: 'bg-blue-500/20 text-blue-300 border-blue-500/40' },
+          { rankLabel: '🥇 1º ESCOLHA (TARDE)', item: (currentPopTier === 'pequenas_ate_200' ? (courses.find(c => c.turno === 'Tarde' && c.curso.includes('Agronegócio')) || topTarde[0]) : (courses.find(c => c.turno === 'Tarde' && c.curso.includes('Gestão')) || topTarde[1])), role: 'Abertura Vespertina (Proteção de Turno)', badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40' },
+          { rankLabel: '🥈 2º Opção Noite', item: topNoite[1], role: 'Forte Alternativa Noturna', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
+          { rankLabel: '🥈 2º Opção Manhã', item: (topManha[1] && !topManha[1].curso.includes('Desenvolvimento') ? topManha[1] : topManha[2]), role: 'Forte Alternativa Matutina', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
+          { rankLabel: '🥈 2º Opção Tarde', item: (topTarde[1] || topTarde[0]), role: 'Forte Alternativa Vespertina', badgeBg: 'bg-slate-800 text-slate-300 border-slate-700' },
         ];
 
         podiumItems.forEach(p => {
@@ -717,22 +811,12 @@
         });
 
       } else {
-        // Turno Específico (Manhã, Tarde ou Noite)
+        // TURNO ESPECÍFICO (MANHÃ, TARDE OU NOITE)
         titleEl.innerHTML = `🏆 Ranking Específico: Qual curso abrir no turno da ${currentShift.toUpperCase()}?`;
         subtitleEl.innerHTML = `Ordem de classificação para o turno selecionado na faixa: ${tier.sheet}`;
 
         courses = courses.filter(c => c.turno === currentShift && c.semestres >= 3);
         courses.sort((a,b) => b.media - a.media);
-
-        const rankLabels = ['🥇 1º LUGAR (Abertura Recomendada)', '🥈 2º LUGAR (Forte Alternativa)', '🥉 3º LUGAR (Opção de Reserva)', '4º Lugar', '5º Lugar', '6º Lugar'];
-        const badgeColors = [
-          'bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold',
-          'bg-slate-300/20 text-slate-200 border-slate-400/40 font-bold',
-          'bg-amber-700/20 text-amber-400 border-amber-700/40 font-semibold',
-          'bg-slate-800 text-slate-400 border-slate-700',
-          'bg-slate-800 text-slate-400 border-slate-700',
-          'bg-slate-800 text-slate-400 border-slate-700'
-        ];
 
         courses.slice(0, 6).forEach((item, idx) => {
           const isSelected = (selectedCourseKey === item.key);
@@ -740,19 +824,45 @@
           el.className = `rank-item p-2.5 rounded-lg border border-slate-800 flex items-center justify-between gap-3 ${isSelected ? 'selected' : ''}`;
           el.onclick = () => selectCourse(item.key);
 
-          const pct = Math.min(100, (item.media / (courses[0].media * 1.1)) * 100);
+          let rankBadge = `${idx + 1}º Lugar`;
+          let badgeClass = 'bg-slate-800 text-slate-400 border border-slate-700';
+          let roleDesc = `${item.eixo} • ${item.qtd.toFixed(1)} un. FATEC`;
+
+          if (idx === 0) {
+            rankBadge = '🥇 1º LUGAR EM DEMANDA';
+            badgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold';
+            if (currentShift !== 'Noite' && item.curso.includes('Análise e Desenvolvimento')) {
+              roleDesc = '<span class="text-amber-300 font-semibold">Maior procura pura (recomendado alocar à Noite)</span>';
+            }
+          } else if (idx === 1) {
+            rankBadge = '🥈 2º LUGAR EM DEMANDA';
+            badgeClass = 'bg-slate-300/20 text-slate-200 border-slate-400/40 font-bold';
+          } else if (idx === 2) {
+            rankBadge = '🥉 3º LUGAR EM DEMANDA';
+            badgeClass = 'bg-amber-700/20 text-amber-400 border-amber-700/40 font-semibold';
+          }
+
+          // Destaque se for o curso recomendado de portfólio
+          if ((currentShift === 'Manhã' && item.curso.includes('Desenvolvimento de Software')) || 
+              (currentShift === 'Tarde' && item.curso.includes('Gestão Empresarial')) ||
+              (currentShift === 'Noite' && item.curso.includes('Análise e Desenvolvimento'))) {
+            rankBadge = '⭐ RECOMENDAÇÃO DE PORTFÓLIO';
+            badgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 font-bold';
+          }
+
+          const pct = Math.min(100, (item.media / (courses[0].media * 1.05)) * 100);
           const color = currentShift === 'Noite' ? '#10b981' : currentShift === 'Manhã' ? '#38bdf8' : '#f59e0b';
 
           el.innerHTML = `
             <div class="flex items-center gap-2.5 flex-1 min-w-0">
-              <span class="text-[11px] px-2 py-0.5 rounded border ${badgeColors[idx] || badgeColors[3]} whitespace-nowrap">
-                ${rankLabels[idx] || (idx+1 + 'º Lugar')}
+              <span class="text-[11px] px-2 py-0.5 rounded border ${badgeClass} whitespace-nowrap">
+                ${rankBadge}
               </span>
               <div class="truncate">
                 <div class="text-xs font-bold text-white truncate">
                   ${item.curso}
                 </div>
-                <div class="text-[10px] text-slate-400">${item.eixo} • ${item.qtd.toFixed(1)} un. FATEC</div>
+                <div class="text-[10px] text-slate-400">${roleDesc}</div>
               </div>
             </div>
             <div class="w-28 flex flex-col items-end gap-1">
@@ -780,12 +890,10 @@
       let activeKeys = [];
 
       if (selectedCourseKey && seriesDict[selectedCourseKey]) {
-        // Modo Curso Selecionado
         const sel = seriesDict[selectedCourseKey];
         titleEl.innerHTML = `📈 Foco no Curso: <span class="text-cyan-400 font-bold">${sel.curso} (${sel.turno})</span>`;
         subtitleEl.innerHTML = `Comparando a trajetória semestral do curso selecionado contra a média do turno`;
         activeKeys = [selectedCourseKey];
-        // Adicionar um ou dois benchmarks do mesmo turno
         Object.keys(seriesDict).forEach(k => {
           if (seriesDict[k].turno === sel.turno && k !== selectedCourseKey && activeKeys.length < 3) {
             activeKeys.push(k);
@@ -794,7 +902,6 @@
       } else if (currentShift === 'todos') {
         titleEl.innerText = `Série Histórica Semestral: Cursos em Destaque (${tier.sheet})`;
         subtitleEl.innerText = `Trajetória dos cursos líderes dos 3 turnos (2022.1 a 2024.2)`;
-        // Pegar os cursos recomendados
         activeKeys = Object.keys(seriesDict).filter(k => {
           return k.includes('Análise e Desenvolvimento') || k.includes('Desenvolvimento de Software') || k.includes('Gestão Empresarial') || k.includes('Gestão da Tecnologia');
         }).slice(0, 5);
@@ -848,13 +955,13 @@
         `;
       }
 
-      // Rótulos X com marcação de sazonalidade
+      // Rótulos X
       semesters.forEach((sem, idx) => {
         const xPos = padLeft + idx * xStep;
         svgHtml += `<text x="${xPos}" y="${height - 8}" fill="#94a3b8" font-size="9.5" font-weight="600" text-anchor="middle">${sem}</text>`;
       });
 
-      // Desenhar curvas
+      // Linhas
       let legendHtml = '';
       activeKeys.forEach((key, colorIdx) => {
         const s = seriesDict[key];
