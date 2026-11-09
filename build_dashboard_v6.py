@@ -856,7 +856,9 @@ html_template = f'''<!DOCTYPE html>
     // RENDERIZAR O GRÁFICO HISTÓRICO DINÂMICO
     function renderDynamicLineChart() {{
       const tier = allPopData[currentPopTier];
-      const series = tier.series;
+      // series is a DICT keyed by "Curso_Turno" => convert to array
+      const seriesDict = tier.series;
+      const seriesArr = Object.keys(seriesDict).map(k => ({{ ...seriesDict[k], key: k }}));
       const semesters = ['22.1', '22.2', '23.1', '23.2', '24.1', '24.2'];
       const ctx = document.getElementById('historicalLineCanvas').getContext('2d');
 
@@ -868,16 +870,22 @@ html_template = f'''<!DOCTYPE html>
       if (currentShift === 'todos') {{
         chartTitle.innerText = `Série Histórica: Top Cursos de Todos os Turnos (${{tier.sheet}})`;
         chartSub.innerText = 'Comparativo de evolução semestral dos cursos líderes de cada turno';
-        targetSeries = series.slice(0, 5);
+        // pega os 2 melhores por turno para uma visão equilibrada
+        const turns = ['Noite', 'Manhã', 'Tarde'];
+        turns.forEach(t => {{
+          const sub = seriesArr.filter(s => s.turno === t && s.semestres >= 2).sort((a,b) => b.media - a.media);
+          targetSeries.push(...sub.slice(0, 2));
+        }});
+        targetSeries = targetSeries.slice(0, 6);
       }} else {{
         chartTitle.innerText = `Série Histórica: Top Cursos do Turno ${{currentShift.toUpperCase()}} (${{tier.sheet}})`;
-        chartSub.innerText = `Evolução semestral dos cursos matutinos, vespertinos ou noturnos`;
-        targetSeries = series.filter(s => s.turno === currentShift).slice(0, 5);
+        chartSub.innerText = `Evolução semestral — sazonalidade .1 (início do ano, pico) vs .2 (recuo)`;
+        targetSeries = seriesArr.filter(s => s.turno === currentShift && s.semestres >= 2).sort((a,b) => b.media - a.media).slice(0, 5);
       }}
 
-      // SE UM CURSO FOI CLICADO, DESTACA ELE!
+      // SE UM CURSO FOI CLICADO, DESTACA ELE NO TOPO!
       if (selectedCourseKey) {{
-        const matched = series.find(s => s.key === selectedCourseKey);
+        const matched = seriesArr.find(s => s.key === selectedCourseKey);
         if (matched) {{
           targetSeries = [matched, ...targetSeries.filter(s => s.key !== selectedCourseKey).slice(0, 4)];
         }}
@@ -889,7 +897,7 @@ html_template = f'''<!DOCTYPE html>
 
         return {{
           label: `${{s.curso}} (${{s.turno}})`,
-          data: s.history,
+          data: s.vals,   // data stored in 'vals', not 'history'
           borderColor: color,
           backgroundColor: color,
           borderWidth: isHighlight ? 3.5 : 2,
